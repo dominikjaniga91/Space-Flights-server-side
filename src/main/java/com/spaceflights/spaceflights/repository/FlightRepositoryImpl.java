@@ -6,11 +6,12 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface FlightRepositoryImpl extends JpaRepository<Flight, Integer> {
 
-        Flight getFlightById(Integer id);
+        Optional<Flight> getFlightById(Integer id);
 
         List<Flight> getFlightsByDestination(String destination);
 

@@ -22,7 +22,8 @@ public class FlightServiceImpl implements FlightService{
     @Override
     public void updateFight(Flight flight) {
 
-        Flight tmpFlight = flightDao.getFlightById(flight.getId());
+        Flight tmpFlight = flightDao.getFlightById(flight.getId())
+                .orElseThrow(() -> new FlightNotFoundException(flight.getId()));
 
         tmpFlight.setDestination(flight.getDestination());
         tmpFlight.setStartDate(flight.getStartDate());
@@ -72,8 +73,9 @@ public class FlightServiceImpl implements FlightService{
         int tempFlightId = Integer.parseInt(flightId);
         int tempPassengerId = Integer.parseInt(passengerId);
 
+        Flight tmpFlight = flightDao.getFlightById(tempFlightId)
+                .orElseThrow(() -> new FlightNotFoundException(tempFlightId));
 
-        Flight tmpFlight = flightDao.getFlightById(tempFlightId);
         Passenger tmpPassenger = passengerDao.getTouristById(tempPassengerId);
 
         if(tmpFlight.getAvailableSeats() > 0 && !tmpFlight.getListOfPassengers().contains(tmpPassenger)){
@@ -91,7 +93,9 @@ public class FlightServiceImpl implements FlightService{
         int tempFlightId = Integer.parseInt(flightId);
         int tempPassengerId = Integer.parseInt(passengerId);
 
-        Flight tmpFlight = flightDao.getFlightById(tempFlightId);
+        Flight tmpFlight = flightDao.getFlightById(tempFlightId)
+                .orElseThrow(() -> new FlightNotFoundException(tempFlightId));
+
         Passenger tmpPassenger = passengerDao.getTouristById(tempPassengerId);
         tmpFlight.removePassenger(tmpPassenger);
         tmpFlight.incrementAvailableSeats();
