@@ -6,11 +6,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-public class InvalidSearchingDataAdvice {
+public class InvalidPassengerDataAdvice {
 
-    @ExceptionHandler(InvalidSearchingDataException.class)
+    @ExceptionHandler(InvalidPassengerDataException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String getInvalidSearchingDataExceptionHandler(InvalidSearchingDataException ex){
+    public String getInvalidPassengerDataExceptionHandler(InvalidPassengerDataException ex){
 
         return ex.getMessage();
     }

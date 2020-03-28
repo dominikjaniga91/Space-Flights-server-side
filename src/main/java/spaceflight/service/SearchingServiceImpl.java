@@ -1,6 +1,7 @@
 package spaceflight.service;
 
-import spaceflight.exception.InvalidSearchingDataException;
+import spaceflight.exception.InvalidFlightDataException;
+import spaceflight.exception.InvalidPassengerDataException;
 import spaceflight.model.Flight;
 import spaceflight.model.Passenger;
 import spaceflight.repository.FlightRepositoryImpl;
@@ -53,7 +54,7 @@ public class SearchingServiceImpl {
         }else if(destination != null && startDate != null){
             flightList = flightDao.getFlightsByDestinationAndStartDateIsGreaterThanEqual(destination, startDate);
         } else{
-            throw new InvalidSearchingDataException(startDate, finishDate, destination);
+            throw new InvalidFlightDataException(startDate, finishDate, destination);
         }
 
         return flightList;
@@ -62,7 +63,7 @@ public class SearchingServiceImpl {
 
     public List<Passenger> getFoundedPassengers(HashMap<String, String> searchParams){
 
-        List<Passenger> passengerList = null;
+        List<Passenger> passengerList;
         LocalDate birthDate = LocalDate.parse(searchParams.get("birthDate"));
         String firstName = searchParams.get("firstName");
         String lastName = searchParams.get("lastName");
@@ -77,6 +78,8 @@ public class SearchingServiceImpl {
             passengerList = passengerDao.getPassengersByLastName(lastName);
         }else if(birthDate == null && firstName != null){
             passengerList = passengerDao.getPassengersByFirstName(firstName);
+        }else{
+            throw new InvalidPassengerDataException(firstName, lastName, birthDate);
         }
 
         return passengerList;
