@@ -2,6 +2,7 @@ package spaceflight.service;
 
 import spaceflight.exception.InvalidSearchingDataException;
 import spaceflight.model.Flight;
+import spaceflight.model.Passenger;
 import spaceflight.repository.FlightRepositoryImpl;
 import spaceflight.repository.PassengerRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,5 +57,28 @@ public class SearchingServiceImpl {
         }
 
         return flightList;
+    }
+
+
+    public List<Passenger> getFoundedPassengers(HashMap<String, String> searchParams){
+
+        List<Passenger> passengerList = null;
+        LocalDate birthDate = LocalDate.parse(searchParams.get("birthDate"));
+        String firstName = searchParams.get("firstName");
+        String lastName = searchParams.get("lastName");
+
+        if(birthDate != null && firstName != null && lastName != null){
+            passengerList = passengerDao.getPassengersByFirstNameAndLastNameAndBirthDate(firstName, lastName, birthDate);
+        }else if(birthDate != null && firstName == null && lastName == null){
+            passengerList = passengerDao.getPassengersByBirthDate(birthDate);
+        }else if(birthDate == null && firstName != null && lastName != null){
+            passengerList = passengerDao.getPassengersByFirstNameAndLastName(firstName, lastName);
+        }else if(birthDate == null && firstName == null && lastName != null){
+            passengerList = passengerDao.getPassengersByLastName(lastName);
+        }else if(birthDate == null && firstName != null){
+            passengerList = passengerDao.getPassengersByFirstName(firstName);
+        }
+
+        return passengerList;
     }
 }
