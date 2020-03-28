@@ -1,4 +1,4 @@
-package com.spaceflights.spaceflights.exception;
+package spaceflight.exception;
 
 public class FlightNotFoundException extends RuntimeException {
 

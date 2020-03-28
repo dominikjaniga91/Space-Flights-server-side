@@ -1,7 +1,7 @@
-package com.spaceflights.spaceflights.model;
+package spaceflight.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.spaceflights.spaceflights.model.validation.StartFinishDate;
+import spaceflight.model.validation.StartFinishDate;
 import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

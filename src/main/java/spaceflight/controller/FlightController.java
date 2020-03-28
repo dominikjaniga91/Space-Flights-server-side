@@ -1,9 +1,9 @@
-package com.spaceflights.spaceflights.controller;
+package spaceflight.controller;
 
-import com.spaceflights.spaceflights.model.Flight;
-import com.spaceflights.spaceflights.model.Passenger;
-import com.spaceflights.spaceflights.service.FlightServiceImpl;
-import com.spaceflights.spaceflights.service.PassengerServiceImpl;
+import spaceflight.model.Flight;
+import spaceflight.model.Passenger;
+import spaceflight.service.FlightServiceImpl;
+import spaceflight.service.PassengerServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +35,7 @@ public class FlightController {
     @PutMapping(value = "/updateFlight")
     @ResponseStatus(HttpStatus.OK)
     public void updateFlight(@RequestBody Flight flight) {
-        flightDao.updateFight(flight);
+        flightDao.updateFlight(flight);
     }
 
     @DeleteMapping("/deleteFlight{id}")

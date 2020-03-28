@@ -1,6 +1,6 @@
-package com.spaceflights.spaceflights.repository;
+package spaceflight.repository;
 
-import com.spaceflights.spaceflights.model.Flight;
+import spaceflight.model.Flight;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

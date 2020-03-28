@@ -1,11 +1,9 @@
-package com.spaceflights.spaceflights.service;
+package spaceflight.service;
 
-import com.spaceflights.spaceflights.model.Flight;
-import com.spaceflights.spaceflights.model.Passenger;
+import spaceflight.model.Flight;
+import spaceflight.model.Passenger;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 public interface FlightService {
 
@@ -19,7 +17,7 @@ public interface FlightService {
 
     List<Passenger> listOfPassengers(Integer id);
 
-    void updateFight(Flight flight);
+    void updateFlight(Flight flight);
 
     void addPassengerToFlight(String flightId, String passengerId);
 
