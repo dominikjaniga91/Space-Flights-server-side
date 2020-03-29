@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 @Entity
-@Table(name="tourist")
+@Table(name="passengers")
 public class Passenger {
 
     @Id
@@ -43,8 +43,8 @@ public class Passenger {
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY,cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH})
-    @JoinTable(name="tourists_flights",
-            joinColumns = @JoinColumn(name="tourist_id", updatable = false),
+    @JoinTable(name="passengers_flights",
+            joinColumns = @JoinColumn(name="passenger_id", updatable = false),
             inverseJoinColumns = @JoinColumn(name="flight_id", updatable = false))
     private List<Flight> listOfFlight = new ArrayList<>();
 

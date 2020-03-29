@@ -82,8 +82,7 @@ public class PassengerServiceImpl implements PassengerService {
             Passenger tmpPassenger = passengerDao.getPassengerById(tempPassengerId)
                     .orElseThrow(() -> new PassengerNotFoundException(tempPassengerId));
 
-            if(tmpFlight.getAvailableSeats() > 0 && !tmpPassenger.getListOfFlight().contains(tmpFlight)){
-                tmpFlight.decrementAvailableSeats();
+            if(tmpFlight.getAmountOfPassengers() > 0 && !tmpPassenger.getListOfFlight().contains(tmpFlight)){
                 tmpPassenger.assignFlight(tmpFlight);
                 flightDao.save(tmpFlight);
 
@@ -103,7 +102,6 @@ public class PassengerServiceImpl implements PassengerService {
                 .orElseThrow(() -> new PassengerNotFoundException(tempPassengerId));
 
         tmpPassenger.removeFlight(tmpFlight);
-        tmpFlight.incrementAvailableSeats();
         flightDao.save(tmpFlight);
 
     }

@@ -38,13 +38,13 @@ public class Flight {
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH})
-    @JoinTable(name="tourists_flights",
+    @JoinTable(name="passengers_flights",
             joinColumns = @JoinColumn(name="flight_id", updatable = false),
-            inverseJoinColumns = @JoinColumn(name="tourist_id", updatable = false))
+            inverseJoinColumns = @JoinColumn(name="passenger_id", updatable = false))
     private List<Passenger> listOfPassengers = new ArrayList<>();
 
-    @Column(name="available_seats")
-    private int availableSeats;
+    @Column(name="amount_of_passengers")
+    private int amountOfPassengers;
 
     @Column(name="ticket_price")
     @NotNull
@@ -59,7 +59,7 @@ public class Flight {
         this.finishDate = finishDate;
         this.numberOfSeats = numberOfSeats;
         this.ticketPrice = ticketPrice;
-        this.availableSeats = numberOfSeats;
+        this.amountOfPassengers = numberOfSeats;
     }
 
 
@@ -119,34 +119,22 @@ public class Flight {
         this.ticketPrice = ticketPrice;
     }
 
-    public int getAvailableSeats() {
-        return availableSeats;
+    public int getAmountOfPassengers() {
+        return amountOfPassengers;
     }
 
-    public void setAvailableSeats(int availableSeats) {
-        this.availableSeats = availableSeats;
+    public void setAmountOfPassengers(int amountOfPassengers) {
+        this.amountOfPassengers = amountOfPassengers;
     }
 
     public void assignPassenger(Passenger passenger){
-
         listOfPassengers.add(passenger);
-    }
-    public void incrementAvailableSeats(){
-
-        this.availableSeats++;
+        this.amountOfPassengers++;
     }
 
-    public void decrementAvailableSeats(){
-
-        this.availableSeats--;
-    }
-
-    public void removePassenger(Passenger passenger){
-        System.out.println();
-        System.out.println(" remove passenger method ");
-        System.out.println(" listOfPassengers " + Arrays.toString(listOfPassengers.toArray()));
+    public void removePassenger(Passenger passenger) {
         listOfPassengers.remove(passenger);
-        System.out.println(" listOfPassengers " + Arrays.toString(listOfPassengers.toArray()));
+        this.amountOfPassengers--;
     }
 
     @Override

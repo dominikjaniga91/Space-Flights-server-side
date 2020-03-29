@@ -27,25 +27,11 @@ public class SearchingServiceImpl {
     public List<Flight> getFoundedFlights(HashMap<String, String> searchParams){
 
         List<Flight> flightList;
-        LocalDate startDate = null;
-        LocalDate finishDate = null;
-        String destination = null;
-
-        for(Map.Entry<String,String > keys : searchParams.entrySet()){
-
-            if(keys.getKey().equals("startDate")){
-                startDate = keys.getValue().equals("") ? null : LocalDate.parse(keys.getValue());
-            }
-            if(keys.getKey().equals("finishDate")){
-                finishDate = keys.getValue().equals("") ? null : LocalDate.parse(keys.getValue());
-            }
-            if(keys.getKey().equals("destination")){
-                destination = keys.getValue().equals("") ? null : keys.getValue();
-            }
-        }
+        LocalDate startDate = LocalDate.parse(searchParams.get("startDate"));
+        LocalDate finishDate = LocalDate.parse(searchParams.get("finishDate"));
+        String destination = searchParams.get("destination");
 
         if(destination != null && startDate != null && finishDate != null){
-            System.out.println("moja metoda");
             flightList = flightDao.getFlightsByDestinationAndStartDateAndFinishDate(destination, startDate, finishDate);
         }else if(destination != null && startDate == null && finishDate == null){
             flightList = flightDao.getFlightsByDestination(destination);

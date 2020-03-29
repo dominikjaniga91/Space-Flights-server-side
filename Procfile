@@ -1,0 +1,1 @@
+java $JAVA_OPTS -jar target/demo-1.jar --server.port=$PORT $JAR_OPTS

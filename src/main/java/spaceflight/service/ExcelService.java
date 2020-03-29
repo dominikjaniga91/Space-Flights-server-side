@@ -57,7 +57,7 @@ public class ExcelService {
                 flight.setStartDate(LocalDate.parse(String.valueOf(data.getValue().get(1)), formater));
                 flight.setFinishDate(LocalDate.parse(String.valueOf(data.getValue().get(2)), formater));
                 flight.setNumberOfSeats((int) Double.parseDouble(String.valueOf(data.getValue().get(3))));
-                flight.setAvailableSeats((int) Double.parseDouble(String.valueOf(data.getValue().get(4))));
+                flight.setAmountOfPassengers((int) Double.parseDouble(String.valueOf(data.getValue().get(4))));
                 flight.setTicketPrice((int) Double.parseDouble(String.valueOf(data.getValue().get(5))));
 
                 flightRepository.save(flight);

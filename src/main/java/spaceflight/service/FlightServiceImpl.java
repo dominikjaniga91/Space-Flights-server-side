@@ -30,7 +30,6 @@ public class FlightServiceImpl implements FlightService{
         tmpFlight.setStartDate(flight.getStartDate());
         tmpFlight.setFinishDate(flight.getFinishDate());
         tmpFlight.setNumberOfSeats(flight.getNumberOfSeats());
-        tmpFlight.setAvailableSeats(flight.getAvailableSeats());
         tmpFlight.setTicketPrice(flight.getTicketPrice());
 
         flightDao.save(tmpFlight);
@@ -38,7 +37,6 @@ public class FlightServiceImpl implements FlightService{
 
     @Override
     public void saveFlight(Flight flight) {
-        flight.setAvailableSeats(flight.getNumberOfSeats());
         flightDao.save(flight);
     }
 
@@ -80,8 +78,7 @@ public class FlightServiceImpl implements FlightService{
         Passenger tmpPassenger = passengerDao.getPassengerById(tempPassengerId)
                 .orElseThrow(() -> new PassengerNotFoundException(tempPassengerId));
 
-        if(tmpFlight.getAvailableSeats() > 0 && !tmpFlight.getListOfPassengers().contains(tmpPassenger)){
-            tmpFlight.decrementAvailableSeats();
+        if(tmpFlight.getAmountOfPassengers() < tmpFlight.getNumberOfSeats() && !tmpFlight.getListOfPassengers().contains(tmpPassenger)){
             tmpFlight.assignPassenger(tmpPassenger);
             flightDao.save(tmpFlight);
         }
@@ -100,7 +97,6 @@ public class FlightServiceImpl implements FlightService{
                 .orElseThrow(() -> new PassengerNotFoundException(tempPassengerId));
 
         tmpFlight.removePassenger(tmpPassenger);
-        tmpFlight.incrementAvailableSeats();
         flightDao.save(tmpFlight);
 
     }
