@@ -10,9 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class SearchingServiceImpl {
@@ -26,10 +24,12 @@ public class SearchingServiceImpl {
 
     public List<Flight> getFoundedFlights(HashMap<String, String> searchParams){
 
+        System.out.println(searchParams);
+
         List<Flight> flightList;
-        LocalDate startDate = LocalDate.parse(searchParams.get("startDate"));
-        LocalDate finishDate = LocalDate.parse(searchParams.get("finishDate"));
-        String destination = searchParams.get("destination");
+        LocalDate startDate = searchParams.containsKey("startDate") ? LocalDate.parse(searchParams.get("finishDate")) : null;
+        LocalDate finishDate = searchParams.containsKey("finishDate") ? LocalDate.parse(searchParams.get("finishDate")) : null;
+        String destination = searchParams.getOrDefault("destination", null);
 
         if(destination != null && startDate != null && finishDate != null){
             flightList = flightDao.getFlightsByDestinationAndStartDateAndFinishDate(destination, startDate, finishDate);

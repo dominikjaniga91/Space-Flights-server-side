@@ -64,11 +64,11 @@ public class PassengerController {
 
     }
 
-    @GetMapping("/addFlightToPassenger")
+    @PostMapping("/addFlightToPassenger")
     @ResponseStatus(HttpStatus.OK)
-    public void addFlightToPassenger(@RequestParam("flightId") String flightId,
-                                     @RequestParam("passengerId") String passengerId){
-        passengerDao.addPassengerToFlight(flightId, passengerId);
+    public void addFlightToPassenger(@RequestParam("passengerId") String passengerId,
+                                     @RequestBody int[] flightsId){
+        passengerDao.addPassengerToFlight(flightsId, passengerId);
 
     }
 }

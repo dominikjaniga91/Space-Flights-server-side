@@ -71,22 +71,21 @@ public class PassengerServiceImpl implements PassengerService {
 
 
     @Override
-    public void addPassengerToFlight(String flightId, String passengerId){
+    public void addPassengerToFlight(int[] flightsId, String passengerId){
 
-        int tempFlightId = Integer.parseInt(flightId);
         int tempPassengerId = Integer.parseInt(passengerId);
+        Passenger tmpPassenger = passengerDao.getPassengerById(tempPassengerId)
+                .orElseThrow(() -> new PassengerNotFoundException(tempPassengerId));
 
-            Flight tmpFlight = flightDao.getFlightById(tempFlightId)
-                    .orElseThrow(() -> new FlightNotFoundException(tempFlightId));
-
-            Passenger tmpPassenger = passengerDao.getPassengerById(tempPassengerId)
-                    .orElseThrow(() -> new PassengerNotFoundException(tempPassengerId));
-
-            if(tmpFlight.getAmountOfPassengers() > 0 && !tmpPassenger.getListOfFlight().contains(tmpFlight)){
+        for (int id : flightsId) {
+            Flight tmpFlight = flightDao.getFlightById(id)
+                    .orElseThrow(() -> new FlightNotFoundException(id));
+            if(tmpFlight.getAmountOfPassengers() <= 15 && !tmpPassenger.getListOfFlight().contains(tmpFlight)){
                 tmpPassenger.assignFlight(tmpFlight);
                 flightDao.save(tmpFlight);
 
             }
+        }
     }
 
     @Override
