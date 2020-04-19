@@ -11,9 +11,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AddFromExcelController {
 
-    @Autowired
-    ExcelService excelService;
 
+    private ExcelService excelService;
+
+    @Autowired
+    public AddFromExcelController(ExcelService excelService) {
+        this.excelService = excelService;
+    }
 
     @GetMapping("/addFromExcel")
     @ResponseStatus(HttpStatus.OK)

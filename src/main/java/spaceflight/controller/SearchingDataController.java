@@ -15,8 +15,12 @@ import java.util.List;
 public class SearchingDataController {
 
 
+    private SearchingServiceImpl searchingService;
+
     @Autowired
-    SearchingServiceImpl searchingService;
+    public SearchingDataController(SearchingServiceImpl searchingService) {
+        this.searchingService = searchingService;
+    }
 
     @PostMapping(path = "/findFlight")
     public ResponseEntity<List<Flight>> getFoundedFlights(@RequestBody HashMap<String, String> searchParams){

@@ -14,12 +14,15 @@ import java.util.*;
 @CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
 public class FlightController {
 
-    @Autowired
-    PassengerServiceImpl passengerDao;
+
+    private PassengerServiceImpl passengerDao;
+    private FlightServiceImpl flightDao;
 
     @Autowired
-    FlightServiceImpl flightDao;
-
+    public FlightController(PassengerServiceImpl passengerDao, FlightServiceImpl flightDao) {
+        this.passengerDao = passengerDao;
+        this.flightDao = flightDao;
+    }
 
     @GetMapping("/allFlights")
     public ResponseEntity<List<Flight>> getListOfFLights() {

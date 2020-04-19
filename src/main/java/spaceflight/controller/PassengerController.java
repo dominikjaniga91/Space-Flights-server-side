@@ -16,11 +16,14 @@ import java.util.List;
 public class PassengerController {
 
 
-    @Autowired
-    FlightServiceImpl flightDao;
+    private FlightServiceImpl flightDao;
+    private PassengerServiceImpl passengerDao;
 
     @Autowired
-    PassengerServiceImpl passengerDao;
+    public PassengerController(FlightServiceImpl flightDao, PassengerServiceImpl passengerDao) {
+        this.flightDao = flightDao;
+        this.passengerDao = passengerDao;
+    }
 
     @GetMapping("/allPassengers")
     public ResponseEntity<List<Passenger>> getListOfFLights() {
