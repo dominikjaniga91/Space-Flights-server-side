@@ -12,6 +12,7 @@ import java.util.*;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
+@RequestMapping("/flights")
 public class FlightController {
 
 
@@ -24,47 +25,47 @@ public class FlightController {
         this.flightDao = flightDao;
     }
 
-    @GetMapping("/allFlights")
+    @GetMapping("/list")
     public ResponseEntity<List<Flight>> getListOfFLights() {
         return ResponseEntity.ok(flightDao.findAll());
     }
 
-    @PostMapping(value = "/saveFlight")
+    @PostMapping(value = "/save")
     @ResponseStatus(HttpStatus.CREATED)
     public void saveFlight(@RequestBody Flight flight) {
         flightDao.saveFlight(flight);
     }
 
-    @PutMapping(value = "/updateFlight")
+    @PutMapping(value = "/update")
     @ResponseStatus(HttpStatus.OK)
     public void updateFlight(@RequestBody Flight flight) {
         flightDao.updateFlight(flight);
     }
 
-    @DeleteMapping("/deleteFlight{id}")
+    @DeleteMapping("/delete/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteFlight(@PathVariable("id") Integer id){
         flightDao.deleteFlightById(id);
     }
 
-    @GetMapping("/loadFlight{id}")
+    @GetMapping("/load/{id}")
     public ResponseEntity<Flight> loadPassenger(@PathVariable("id") Integer id){
         return ResponseEntity.ok(flightDao.getFlightById(id));
     }
 
-    @GetMapping("/flightPassengers{id}")
+    @GetMapping("/passengers/{id}")
     public ResponseEntity<List<Passenger>> getPassengerFlights(@PathVariable("id") Integer id){
         return ResponseEntity.ok(flightDao.listOfPassengers(id));
     }
 
-    @DeleteMapping("/deleteFromFlight")
+    @DeleteMapping("/delete-passenger")
     @ResponseStatus(HttpStatus.OK)
     public void deletePassengerFromFlight(@RequestParam("flightId") String flightId,
                                           @RequestParam("passengerId") String passengerId){
         flightDao.deletePassengerFromFlight(flightId, passengerId);
     }
 
-    @GetMapping("/addPassengerToFlight")
+    @GetMapping("/add-passenger")
     @ResponseStatus(HttpStatus.OK)
     public void addPassengerToFlight(@RequestParam("flightId") String flightId,
                                      @RequestParam("passengerId") String passengerId){

@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
+@RequestMapping("/search")
 public class SearchingDataController {
 
 
@@ -22,13 +23,13 @@ public class SearchingDataController {
         this.searchingService = searchingService;
     }
 
-    @PostMapping(path = "/findFlight")
+    @PostMapping(path = "/flight")
     public ResponseEntity<List<Flight>> getFoundedFlights(@RequestBody HashMap<String, String> searchParams){
 
         List<Flight> flightList = searchingService.getFoundedFlights(searchParams);
         return ResponseEntity.ok(flightList);
     }
-    @PostMapping(path = "/findPassenger")
+    @PostMapping(path = "/passenger")
     public ResponseEntity<List<Passenger>> getFoundedPassengers(@RequestBody HashMap<String, String> searchParams){
 
         List<Passenger> passengerList = searchingService.getFoundedPassengers(searchParams);
