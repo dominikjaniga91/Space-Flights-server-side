@@ -11,16 +11,16 @@ public interface FlightService {
 
     void saveFlight(Flight flight);
 
-    Flight getFlightById(Integer id);
+    Flight getFlightById(int id);
 
-    void deleteFlightById(Integer id);
+    void deleteFlightById(int id);
 
-    List<Passenger> listOfPassengers(Integer id);
+    List<Passenger> listOfPassengers(int id);
 
     void updateFlight(Flight flight);
 
-    void addPassengerToFlight(String flightId, String passengerId);
+    void addPassengersToFlight(int flightId, int[] passengers);
 
-    void deletePassengerFromFlight(String flightId, String passengerId);
+    void deletePassengerFromFlight(int flightId, int passengerId);
 
 }

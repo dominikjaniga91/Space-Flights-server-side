@@ -25,51 +25,51 @@ public class FlightController {
         this.flightDao = flightDao;
     }
 
-    @GetMapping("/list")
+    @GetMapping("/flight")
     public ResponseEntity<List<Flight>> getListOfFLights() {
         return ResponseEntity.ok(flightDao.findAll());
     }
 
-    @PostMapping(value = "/save")
+    @PostMapping(value = "/flight")
     @ResponseStatus(HttpStatus.CREATED)
     public void saveFlight(@RequestBody Flight flight) {
         flightDao.saveFlight(flight);
     }
 
-    @PutMapping(value = "/update")
+    @PutMapping(value = "/flight")
     @ResponseStatus(HttpStatus.OK)
     public void updateFlight(@RequestBody Flight flight) {
         flightDao.updateFlight(flight);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/flight/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteFlight(@PathVariable("id") Integer id){
         flightDao.deleteFlightById(id);
     }
 
-    @GetMapping("/load/{id}")
-    public ResponseEntity<Flight> loadPassenger(@PathVariable("id") Integer id){
+    @GetMapping("/flight/{flightId}")
+    public ResponseEntity<Flight> loadPassenger(@PathVariable("flightId") Integer id){
         return ResponseEntity.ok(flightDao.getFlightById(id));
     }
 
-    @GetMapping("/passengers/{id}")
-    public ResponseEntity<List<Passenger>> getPassengerFlights(@PathVariable("id") Integer id){
+    @GetMapping("/flight/{flightId}/passengers")
+    public ResponseEntity<List<Passenger>> getPassengerFlights(@PathVariable("flightId") Integer id){
         return ResponseEntity.ok(flightDao.listOfPassengers(id));
     }
 
-    @DeleteMapping("/delete-passenger")
+    @DeleteMapping("/flight/{flightId}/passengers/{passengerId}")
     @ResponseStatus(HttpStatus.OK)
-    public void deletePassengerFromFlight(@RequestParam("flightId") String flightId,
-                                          @RequestParam("passengerId") String passengerId){
+    public void deletePassengerFromFlight(@PathVariable("flightId") Integer flightId,
+                                          @PathVariable("passengerId") Integer passengerId){
         flightDao.deletePassengerFromFlight(flightId, passengerId);
     }
 
-    @GetMapping("/add-passenger")
+    @PutMapping("/flight/{flightId}/passengers")
     @ResponseStatus(HttpStatus.OK)
-    public void addPassengerToFlight(@RequestParam("flightId") String flightId,
-                                     @RequestParam("passengerId") String passengerId){
-        flightDao.addPassengerToFlight(flightId, passengerId);
+    public void addPassengersToFlight(@PathVariable("flightId") Integer flightId,
+                                     @RequestBody int[] passengers){
+        flightDao.addPassengersToFlight(flightId, passengers);
     }
 
 }
