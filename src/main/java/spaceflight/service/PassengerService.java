@@ -19,7 +19,7 @@ public interface PassengerService {
 
     void updatePassenger(Passenger passenger);
 
-    void addPassengerToFlight(int[] flightsId, String passengerId);
+    void addFlightsToPassenger(int[] flightsId, int passengerId);
 
-    void deleteFlightFromPassenger(String flightId, String passengerId);
+    void deleteFlightFromPassenger(int flightId, int passengerId);
 }

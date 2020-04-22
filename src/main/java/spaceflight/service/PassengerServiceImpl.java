@@ -64,44 +64,42 @@ public class PassengerServiceImpl implements PassengerService {
     @Override
     public List<Flight> listOfPassengerFlights(Integer id) {
 
-        Passenger passenger = passengerDao.findById(id).orElseThrow(
-                ()->new PassengerNotFoundException(id));
+        Passenger passenger = passengerDao.findById(id)
+                .orElseThrow(()->new PassengerNotFoundException(id));
        return passenger.getListOfFlight();
     }
 
 
     @Override
-    public void addPassengerToFlight(int[] flightsId, String passengerId){
+    public void addFlightsToPassenger(int[] flights, int passengerId){
 
-        int tempPassengerId = Integer.parseInt(passengerId);
-        Passenger tmpPassenger = passengerDao.getPassengerById(tempPassengerId)
-                .orElseThrow(() -> new PassengerNotFoundException(tempPassengerId));
+        Passenger passenger = passengerDao.getPassengerById(passengerId)
+                .orElseThrow(() -> new PassengerNotFoundException(passengerId));
 
-        for (int id : flightsId) {
-            Flight tmpFlight = flightDao.getFlightById(id)
+        for (int id : flights) {
+            Flight flight = flightDao.getFlightById(id)
                     .orElseThrow(() -> new FlightNotFoundException(id));
-            if(tmpFlight.getAmountOfPassengers() <= 15 && !tmpPassenger.getListOfFlight().contains(tmpFlight)){
-                tmpPassenger.assignFlight(tmpFlight);
-                flightDao.save(tmpFlight);
+            if(flight.getAmountOfPassengers() <= flight.getNumberOfSeats() &&
+               !passenger.getListOfFlight().contains(flight)){
+
+                passenger.assignFlight(flight);
+                flightDao.save(flight);
 
             }
         }
     }
 
     @Override
-    public void deleteFlightFromPassenger(String flightId, String passengerId){
+    public void deleteFlightFromPassenger(int flightId, int passengerId){
 
-        int tempFlightId = Integer.parseInt(flightId);
-        int tempPassengerId = Integer.parseInt(passengerId);
+        Flight flight = flightDao.getFlightById(flightId)
+                .orElseThrow(() -> new FlightNotFoundException(flightId));
 
-        Flight tmpFlight = flightDao.getFlightById(tempFlightId)
-                .orElseThrow(() -> new FlightNotFoundException(tempFlightId));
+        Passenger passenger = passengerDao.getPassengerById(passengerId)
+                .orElseThrow(() -> new PassengerNotFoundException(passengerId));
 
-        Passenger tmpPassenger = passengerDao.getPassengerById(tempPassengerId)
-                .orElseThrow(() -> new PassengerNotFoundException(tempPassengerId));
-
-        tmpPassenger.removeFlight(tmpFlight);
-        flightDao.save(tmpFlight);
+        passenger.removeFlight(flight);
+        flightDao.save(flight);
 
     }
 }

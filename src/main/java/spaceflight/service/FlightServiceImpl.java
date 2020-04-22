@@ -80,7 +80,7 @@ public class FlightServiceImpl implements FlightService{
                     .orElseThrow(() -> new PassengerNotFoundException(id));
 
             if(flight.getAmountOfPassengers() <= flight.getNumberOfSeats() &&
-                !passenger.getListOfFlight().contains(flight)) {
+               !passenger.getListOfFlight().contains(flight)) {
 
                 flight.assignPassenger(passenger);
                 flightDao.save(flight);
@@ -91,14 +91,14 @@ public class FlightServiceImpl implements FlightService{
     @Override
     public void deletePassengerFromFlight(int flightId, int passengerId){
 
-        Flight tmpFlight = flightDao.getFlightById(flightId)
+        Flight flight = flightDao.getFlightById(flightId)
                 .orElseThrow(() -> new FlightNotFoundException(flightId));
 
-        Passenger tmpPassenger = passengerDao.getPassengerById(passengerId)
+        Passenger passenger = passengerDao.getPassengerById(passengerId)
                 .orElseThrow(() -> new PassengerNotFoundException(passengerId));
 
-        tmpFlight.removePassenger(tmpPassenger);
-        flightDao.save(tmpFlight);
+        flight.removePassenger(passenger);
+        flightDao.save(flight);
 
     }
 }

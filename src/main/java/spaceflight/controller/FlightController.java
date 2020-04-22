@@ -25,7 +25,7 @@ public class FlightController {
         this.flightDao = flightDao;
     }
 
-    @GetMapping("/flight")
+    @GetMapping("/")
     public ResponseEntity<List<Flight>> getListOfFLights() {
         return ResponseEntity.ok(flightDao.findAll());
     }
@@ -42,9 +42,9 @@ public class FlightController {
         flightDao.updateFlight(flight);
     }
 
-    @DeleteMapping("/flight/{id}")
+    @DeleteMapping("/flight/{flightId}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteFlight(@PathVariable("id") Integer id){
+    public void deleteFlight(@PathVariable("flightId") Integer id){
         flightDao.deleteFlightById(id);
     }
 
@@ -54,7 +54,7 @@ public class FlightController {
     }
 
     @GetMapping("/flight/{flightId}/passengers")
-    public ResponseEntity<List<Passenger>> getPassengerFlights(@PathVariable("flightId") Integer id){
+    public ResponseEntity<List<Passenger>> getFlightPassengers(@PathVariable("flightId") Integer id){
         return ResponseEntity.ok(flightDao.listOfPassengers(id));
     }
 
