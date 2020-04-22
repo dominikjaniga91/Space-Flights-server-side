@@ -12,7 +12,6 @@ import java.util.*;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
-@RequestMapping("/flights")
 public class FlightController {
 
 
@@ -25,7 +24,7 @@ public class FlightController {
         this.flightDao = flightDao;
     }
 
-    @GetMapping("/")
+    @GetMapping("/flights")
     public ResponseEntity<List<Flight>> getListOfFLights() {
         return ResponseEntity.ok(flightDao.findAll());
     }
@@ -53,19 +52,19 @@ public class FlightController {
         return ResponseEntity.ok(flightDao.getFlightById(id));
     }
 
-    @GetMapping("/flight/{flightId}/passengers")
+    @GetMapping("/flight/passengers/{flightId}")
     public ResponseEntity<List<Passenger>> getFlightPassengers(@PathVariable("flightId") Integer id){
         return ResponseEntity.ok(flightDao.listOfPassengers(id));
     }
 
-    @DeleteMapping("/flight/{flightId}/passengers/{passengerId}")
+    @DeleteMapping("/flight/passengers/{flightId}/{passengerId}")
     @ResponseStatus(HttpStatus.OK)
     public void deletePassengerFromFlight(@PathVariable("flightId") Integer flightId,
                                           @PathVariable("passengerId") Integer passengerId){
         flightDao.deletePassengerFromFlight(flightId, passengerId);
     }
 
-    @PutMapping("/flight/{flightId}/passengers")
+    @PutMapping("/flight/passengers/{flightId}")
     @ResponseStatus(HttpStatus.OK)
     public void addPassengersToFlight(@PathVariable("flightId") Integer flightId,
                                      @RequestBody int[] passengers){
