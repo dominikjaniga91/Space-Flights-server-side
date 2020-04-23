@@ -1,11 +1,12 @@
 package spaceflight.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.mockito.Mockito;
+import org.springframework.http.HttpHeaders;
 import spaceflight.model.Flight;
 import spaceflight.service.FlightServiceImpl;
 import spaceflight.service.PassengerServiceImpl;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.BDDMockito;
@@ -15,15 +16,16 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
+
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(FlightController.class)
@@ -39,6 +41,7 @@ public class FlightControllerTest {
     PassengerServiceImpl passengerService;
     // każda zależność która została wstrzyknięta w kontrolerze musi zostać dodana do testu
 
+    private SimpleDateFormat dateFormat;
 
     @Test
     void shouldReturnSizeOfFlightsList_afterRequestingRightPathToController() throws Exception {
@@ -72,11 +75,10 @@ public class FlightControllerTest {
         mockMvc.perform(get("/flights")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id", Matchers.is(1)))
                 .andExpect(jsonPath("$[0].destination", Matchers.is("Moon")))
-                .andExpect(jsonPath("$[0].startDate", Matchers.is("2020-03-25")))
-                .andExpect(jsonPath("$[0].finishDate", Matchers.is("2020-04-25")))
-                .andExpect(jsonPath("$[0].ticketPrice", Matchers.is(15000.0)));
+                .andExpect(jsonPath("$[1].destination", Matchers.is("Jupiter")))
+                .andExpect(jsonPath("$[2].destination", Matchers.is("Mars")))
+                .andExpect(jsonPath("$[3].destination", Matchers.is("Jupiter")));
 
         BDDMockito.verify(flightService, Mockito.times(1)).findAll();
         BDDMockito.verifyNoMoreInteractions(flightService);
@@ -101,6 +103,25 @@ public class FlightControllerTest {
 
     }
 
+    @Test
+    void shouldReturnFlight_afterRequestForSaveFlight() throws Exception {
+        Flight flight = new Flight(4,"Jupiter", LocalDate.of(2020,4,25), LocalDate.of(2020,5,25), 15, 80000.0);
+        BDDMockito.given(flightService.saveFlight(any(Flight.class))).willReturn(flight);
 
+
+        mockMvc.perform(post("/flight")
+                .content(new ObjectMapper().writeValueAsString(flight))
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id", Matchers.is(4)))
+                .andExpect(jsonPath("$.destination", Matchers.is("Jupiter")))
+                .andExpect(jsonPath("$.startDate", Matchers.is("2020-04-25")))
+                .andExpect(jsonPath("$.finishDate", Matchers.is("2020-05-25")))
+                .andExpect(jsonPath("$.ticketPrice", Matchers.is(80000.0)));
+
+        BDDMockito.verify(flightService, Mockito.times(1)).saveFlight(any(Flight.class));
+        BDDMockito.verifyNoMoreInteractions(flightService);
+    }
 
 }

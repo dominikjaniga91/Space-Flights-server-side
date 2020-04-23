@@ -39,8 +39,8 @@ public class FlightServiceImpl implements FlightService{
     }
 
     @Override
-    public void saveFlight(Flight flight) {
-        flightDao.save(flight);
+    public Flight saveFlight(Flight flight) {
+        return flightDao.save(flight);
     }
 
     @Override

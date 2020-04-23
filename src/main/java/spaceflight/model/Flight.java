@@ -1,6 +1,10 @@
 package spaceflight.model;
 
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import spaceflight.model.validation.StartFinishDate;
 import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
@@ -24,11 +28,13 @@ public class Flight {
     @Column(name="start_date")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @NotNull
+    @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate startDate;
 
     @Column(name="finish_date")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @NotNull
+    @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate finishDate;
 
     @Column(name="number_of_seats")
@@ -54,6 +60,16 @@ public class Flight {
     }
 
     public Flight(String destination, LocalDate startDate, LocalDate finishDate, int numberOfSeats, double ticketPrice) {
+        this.destination = destination;
+        this.startDate = startDate;
+        this.finishDate = finishDate;
+        this.numberOfSeats = numberOfSeats;
+        this.ticketPrice = ticketPrice;
+        this.amountOfPassengers = numberOfSeats;
+    }
+
+    public Flight(Integer id, String destination, LocalDate startDate, LocalDate finishDate, int numberOfSeats, double ticketPrice) {
+        this.id = id;
         this.destination = destination;
         this.startDate = startDate;
         this.finishDate = finishDate;

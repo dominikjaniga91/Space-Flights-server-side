@@ -29,13 +29,12 @@ public class FlightController {
         return ResponseEntity.ok(flightDao.findAll());
     }
 
-    @PostMapping(value = "/flight")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void saveFlight(@RequestBody Flight flight) {
-        flightDao.saveFlight(flight);
+    @PostMapping("/flight")
+    public ResponseEntity<Flight> saveFlight(@RequestBody Flight flight) {
+        return new ResponseEntity<>(flightDao.saveFlight(flight), HttpStatus.CREATED);
     }
 
-    @PutMapping(value = "/flight")
+    @PutMapping("/flight")
     @ResponseStatus(HttpStatus.OK)
     public void updateFlight(@RequestBody Flight flight) {
         flightDao.updateFlight(flight);

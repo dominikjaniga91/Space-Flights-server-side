@@ -9,7 +9,7 @@ public interface FlightService {
 
     List<Flight> findAll();
 
-    void saveFlight(Flight flight);
+    Flight saveFlight(Flight flight);
 
     Flight getFlightById(int id);
 
