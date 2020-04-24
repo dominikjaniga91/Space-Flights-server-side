@@ -109,7 +109,6 @@ public class FlightControllerTest {
         Flight flight = new Flight(4,"Jupiter", LocalDate.of(2020,4,25), LocalDate.of(2020,5,25), 15, 80000.0);
         BDDMockito.given(flightService.saveFlight(any(Flight.class))).willReturn(flight);
 
-
         mockMvc.perform(post("/flight")
                 .content(new ObjectMapper().writeValueAsString(flight))
                 .contentType(MediaType.APPLICATION_JSON))
@@ -136,6 +135,21 @@ public class FlightControllerTest {
                 .andExpect(status().isOk());
 
         BDDMockito.verify(flightService).deleteFlightById(1);
+    }
+
+    @Test
+    void shouldUpdateFlight_afterRequestingRightPath() throws Exception {
+        Flight flight = new Flight(1,"Neptune", LocalDate.of(2020,4,25), LocalDate.of(2021,5,25), 15, 1_000_000.00);
+        BDDMockito.given(flightService.updateFlight(any(Flight.class))).willReturn(flight);
+
+        mockMvc.perform(put("/flight")
+                .content(new ObjectMapper().writeValueAsString(flight))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        BDDMockito.verify(flightService, Mockito.times(1)).updateFlight(any(Flight.class));
+        BDDMockito.verifyNoMoreInteractions(flightService);
+
     }
 
 }
