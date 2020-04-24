@@ -1,5 +1,6 @@
 package spaceflight.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -25,8 +26,11 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -106,5 +110,28 @@ public class PassengerControllerTest {
         BDDMockito.verify(passengerService, Mockito.times(1)).getPassengerById(4);
         BDDMockito.verifyNoMoreInteractions(passengerService);
 
+    }
+
+    @Test
+    void shouldReturnFlight_afterRequestForSaveFlight() throws Exception {
+        Passenger passenger =  new Passenger(5, "Michael", "Jordan", Sex.MALE.toString(), "USA", "Basketball player", LocalDate.of(1966, 11, 10));
+        BDDMockito.given(passengerService.savePassenger(any(Passenger.class))).willReturn(passenger);
+
+        mockMvc.perform(post("/passenger")
+                .content(new ObjectMapper().writeValueAsString(passenger))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id", Matchers.is(5)))
+                .andExpect(jsonPath("$.firstName", is("Michael")))
+                .andExpect(jsonPath("$.lastName", is("Jordan")))
+                .andExpect(jsonPath("$.sex", is("MALE")))
+                .andExpect(jsonPath("$.country", is("USA")))
+                .andExpect(jsonPath("$.notes", is("Basketball player")))
+                .andExpect(jsonPath("$.birthDate", is("1966-11-10")));
+
+
+        BDDMockito.verify(passengerService, Mockito.times(1)).savePassenger(any(Passenger.class));
+        BDDMockito.verifyNoMoreInteractions(passengerService);
     }
 }
