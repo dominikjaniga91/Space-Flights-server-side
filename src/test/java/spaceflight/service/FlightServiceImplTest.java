@@ -13,6 +13,7 @@ import spaceflight.repository.FlightRepositoryImpl;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -58,6 +59,15 @@ public class FlightServiceImplTest {
 
         flightRepository.deleteById(5);
         Assertions.assertEquals(4, flightRepository.findAll().size());
+    }
+
+    @Test
+    @Order(4)
+    void shouldReturnFlightToMoon_afterGetFlightById(){
+
+        Optional<Flight> tmpTight =  flightRepository.getFlightById(1);
+        Flight flight = tmpTight.orElseThrow();
+        Assertions.assertEquals("Moon", flight.getDestination());
     }
 
 
