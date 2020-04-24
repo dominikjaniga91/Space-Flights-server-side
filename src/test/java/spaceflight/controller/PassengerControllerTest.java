@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -68,4 +69,20 @@ public class PassengerControllerTest {
         BDDMockito.verifyNoMoreInteractions(passengerService);
     }
 
+    @Test
+    void shouldReturnFlightsListAsJson_afterRequestingRightPathToController() throws Exception {
+
+        BDDMockito.given(passengerService.findAll()).willReturn(passengers);
+
+        mockMvc.perform(get("/passengers")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].firstName", is("Dominik")))
+                .andExpect(jsonPath("$[1].firstName", is("Ania")))
+                .andExpect(jsonPath("$[2].firstName", is("Adam")))
+                .andExpect(jsonPath("$[3].firstName", is("Michael")));
+
+        BDDMockito.verify(passengerService, Mockito.times(1)).findAll();
+        BDDMockito.verifyNoMoreInteractions(passengerService);
+    }
 }
