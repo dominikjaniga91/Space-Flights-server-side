@@ -14,20 +14,15 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import spaceflight.model.Flight;
 import spaceflight.model.Passenger;
 import spaceflight.model.Sex;
-import spaceflight.service.FlightServiceImpl;
 import spaceflight.service.PassengerServiceImpl;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -191,5 +186,15 @@ public class PassengerControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk());
 
+    }
+
+    @Test
+    void shouldReturnStatusOk_afterRequestDeletePassengerFromFlight() throws Exception {
+
+        BDDMockito.doNothing().when(passengerService).deleteFlightFromPassenger(1, 1);
+        mockMvc.perform(delete("/passenger/flights/{passengerId}/{flightId}", 1, 1))
+                .andDo(print())
+                .andExpect(status().isOk());
+        BDDMockito.verify(passengerService).deleteFlightFromPassenger(1,1);
     }
 }
