@@ -6,7 +6,6 @@ import org.junit.jupiter.api.TestInstance;
 import org.mockito.Mockito;
 import spaceflight.model.Flight;
 import spaceflight.service.FlightServiceImpl;
-import spaceflight.service.PassengerServiceImpl;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -169,7 +168,8 @@ public class FlightControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
-    @Test void shouldReturnOnePassenger_afterRequestPutPassengerInFlight() throws Exception {
+    @Test
+    void shouldReturnStatusOk_afterRequestPutPassengerInFlight() throws Exception {
 
         int[] id = { 1 };
         Mockito.doNothing().when(flightService).addPassengersToFlight(1, id);
@@ -180,6 +180,19 @@ public class FlightControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk());
 
+    }
+
+    @Test
+    void shouldReturnStatusOk_afterRequestDeletePassengerFromFlight() throws Exception {
+
+
+        BDDMockito.doNothing().when(flightService).deletePassengerFromFlight(1, 1);
+
+        mockMvc.perform(delete("/flight/passengers/{flightId}/{passengerId}", 1, 1))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        BDDMockito.verify(flightService).deletePassengerFromFlight(1,1);
     }
 
 
