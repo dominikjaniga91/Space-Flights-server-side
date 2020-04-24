@@ -1,9 +1,6 @@
 package spaceflight.service;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
@@ -22,6 +19,7 @@ import java.util.stream.Stream;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @ActiveProfiles("test")
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class FlightServiceImplTest {
 
@@ -41,16 +39,25 @@ public class FlightServiceImplTest {
 
 
     @Test
+    @Order(1)
     void shouldReturnFourFlights_afterGetAllFlightsFromDatabase(){
         Assertions.assertEquals(4, flightRepository.findAll().size());
     }
 
     @Test
+    @Order(2)
     void shouldReturnFiveFlights_afterSaveFlightToDatabase(){
         Flight flight = new Flight("Neptune", LocalDate.of(2020,3,25), LocalDate.of(2021,4,25), 15, 3_000_000.0);
         flightRepository.save(flight);
-
         Assertions.assertEquals(5, flightRepository.findAll().size());
+    }
+
+    @Test
+    @Order(3)
+    void shouldReturnFourFlight_afterDeleteOneFlightFromDatabase(){
+
+        flightRepository.deleteById(5);
+        Assertions.assertEquals(4, flightRepository.findAll().size());
     }
 
 
