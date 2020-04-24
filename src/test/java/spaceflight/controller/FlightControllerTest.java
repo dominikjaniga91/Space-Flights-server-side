@@ -90,7 +90,8 @@ public class FlightControllerTest {
         Flight flight = new Flight(4,"Jupiter", LocalDate.of(2020,4,25), LocalDate.of(2020,5,25), 15, 80000.0);
         BDDMockito.given(flightService.getFlightById(anyInt())).willReturn(flight);
 
-       mockMvc.perform(get("/flight/{id}", 1))
+       mockMvc.perform(get("/flight/{id}", 1)
+               .contentType(MediaType.APPLICATION_JSON))
                .andExpect(status().isOk())
                .andExpect(jsonPath("$.id", Matchers.is(4)))
                .andExpect(jsonPath("$.destination", Matchers.is("Jupiter")))
@@ -111,7 +112,7 @@ public class FlightControllerTest {
 
         mockMvc.perform(post("/flight")
                 .content(new ObjectMapper().writeValueAsString(flight))
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+                .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id", Matchers.is(4)))
@@ -122,6 +123,19 @@ public class FlightControllerTest {
 
         BDDMockito.verify(flightService, Mockito.times(1)).saveFlight(any(Flight.class));
         BDDMockito.verifyNoMoreInteractions(flightService);
+    }
+
+
+    @Test
+    void shouldDeleteFlight_afterRequestingRightPath() throws Exception {
+
+        BDDMockito.doNothing().when(flightService).deleteFlightById(1);
+
+        mockMvc.perform(delete("/flight/{id}", 1))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        BDDMockito.verify(flightService).deleteFlightById(1);
     }
 
 }
