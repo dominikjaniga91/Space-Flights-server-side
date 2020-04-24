@@ -9,7 +9,7 @@ public interface PassengerService {
 
     List<Passenger> findAll();
 
-    void savePassenger(Passenger passenger);
+    Passenger savePassenger(Passenger passenger);
 
     void deletePassengerById(Integer id);
 

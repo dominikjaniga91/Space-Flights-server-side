@@ -16,12 +16,10 @@ import java.util.List;
 public class PassengerController {
 
 
-    private FlightServiceImpl flightDao;
     private PassengerServiceImpl passengerDao;
 
     @Autowired
-    public PassengerController(FlightServiceImpl flightDao, PassengerServiceImpl passengerDao) {
-        this.flightDao = flightDao;
+    public PassengerController(PassengerServiceImpl passengerDao) {
         this.passengerDao = passengerDao;
     }
 
@@ -31,9 +29,8 @@ public class PassengerController {
     }
 
     @PostMapping(value = "/passenger")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void savePassenger(@RequestBody Passenger passenger){
-        passengerDao.savePassenger(passenger);
+    public ResponseEntity<Passenger> savePassenger(@RequestBody Passenger passenger){
+        return new ResponseEntity<>(passengerDao.savePassenger(passenger), HttpStatus.CREATED) ;
     }
 
     @PutMapping(value = "/passenger")

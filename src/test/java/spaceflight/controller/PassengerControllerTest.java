@@ -28,8 +28,7 @@ import java.util.stream.Stream;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -133,5 +132,17 @@ public class PassengerControllerTest {
 
         BDDMockito.verify(passengerService, Mockito.times(1)).savePassenger(any(Passenger.class));
         BDDMockito.verifyNoMoreInteractions(passengerService);
+    }
+
+    @Test
+    void shouldDeleteFlight_afterRequestingRightPath() throws Exception {
+
+        BDDMockito.doNothing().when(passengerService).deletePassengerById(1);
+
+        mockMvc.perform(delete("/passenger/{passengerId}", 1))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        BDDMockito.verify(passengerService).deletePassengerById(1);
     }
 }

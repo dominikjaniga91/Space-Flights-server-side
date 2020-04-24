@@ -42,8 +42,8 @@ public class PassengerServiceImpl implements PassengerService {
     }
 
     @Override
-    public void savePassenger(Passenger passenger) {
-        passengerDao.save(passenger);
+    public Passenger savePassenger(Passenger passenger) {
+        return passengerDao.save(passenger);
     }
 
     @Override

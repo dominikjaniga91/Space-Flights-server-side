@@ -1,6 +1,8 @@
 package spaceflight.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -39,6 +41,7 @@ public class Passenger {
 
     @Column(name="birth_date")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate birthDate;
 
     @JsonIgnore
@@ -52,6 +55,16 @@ public class Passenger {
     }
 
     public Passenger(String firstName, String lastName, String sex, String country, String notes, LocalDate birthDate) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.sex = sex;
+        this.country = country;
+        this.notes = notes;
+        this.birthDate = birthDate;
+    }
+
+    public Passenger(Integer id, String firstName, String lastName, String sex, String country, String notes, LocalDate birthDate) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.sex = sex;
