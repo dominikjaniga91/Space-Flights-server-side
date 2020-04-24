@@ -178,4 +178,18 @@ public class PassengerControllerTest {
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
+
+    @Test
+    void shouldReturnStatusOk_afterRequestPutFlightForPassenger() throws Exception {
+
+        int[] flightId = { 1 };
+        Mockito.doNothing().when(passengerService).addFlightsToPassenger(flightId, 1);
+
+        mockMvc.perform(put("/passenger/flights/{passengerId}", 1)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(flightId)))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+    }
 }
