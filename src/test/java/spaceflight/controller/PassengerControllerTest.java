@@ -112,7 +112,7 @@ public class PassengerControllerTest {
     }
 
     @Test
-    void shouldReturnFlight_afterRequestForSaveFlight() throws Exception {
+    void shouldReturnPassenger_afterRequestForSavePassenger() throws Exception {
         Passenger passenger =  new Passenger(5, "Michael", "Jordan", Sex.MALE.toString(), "USA", "Basketball player", LocalDate.of(1966, 11, 10));
         BDDMockito.given(passengerService.savePassenger(any(Passenger.class))).willReturn(passenger);
 
@@ -135,7 +135,7 @@ public class PassengerControllerTest {
     }
 
     @Test
-    void shouldDeleteFlight_afterRequestingRightPath() throws Exception {
+    void shouldDeletePassenger_afterRequestingRightPath() throws Exception {
 
         BDDMockito.doNothing().when(passengerService).deletePassengerById(1);
 
@@ -147,7 +147,7 @@ public class PassengerControllerTest {
     }
 
     @Test
-    void shouldUpdateFlight_afterRequestingRightPath() throws Exception {
+    void shouldUpdatePassenger_afterRequestingRightPath() throws Exception {
         Passenger passenger =  new Passenger(5, "Michael", "Jordan", Sex.MALE.toString(), "USA", "Basketball player", LocalDate.of(1966, 11, 10));
         BDDMockito.given(passengerService.updatePassenger(any(Passenger.class))).willReturn(passenger);
 
@@ -159,5 +159,23 @@ public class PassengerControllerTest {
         BDDMockito.verify(passengerService, Mockito.times(1)).updatePassenger(any(Passenger.class));
         BDDMockito.verifyNoMoreInteractions(passengerService);
 
+    }
+
+    @Test
+    void shouldReturnBadRequest_afterSendRequestWithBadData() throws Exception {
+
+        String flight = "{\"id\": \"dfwwd\",\n" +
+                " \"firstName\": 9234,\n" +
+                " \"lastName\": \"5324vvv4636\",\n" +
+                " \"sex\": 60t4tgwt0,\n" +
+                " \"country\": \"ffffff,\n" +
+                " \"notes\": \"ffffff,\n" +
+                " \"birthDate\": \"ffffff\"}";
+
+        mockMvc.perform(post("/passenger")
+                .content(flight)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
     }
 }
