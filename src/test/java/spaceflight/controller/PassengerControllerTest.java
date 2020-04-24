@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -48,9 +49,9 @@ public class PassengerControllerTest {
 
         passengers = Stream.of(
                 new Passenger(1, "Dominik", "Janiga", Sex.MALE.toString(), "Poland", null, LocalDate.of(1990, 11, 11)),
-                new Passenger(1, "Ania", "Kowalska", Sex.FEMALE.toString(), "Poland", null, LocalDate.of(1991, 10, 11)),
-                new Passenger(1, "Adam", "Kowalski", Sex.MALE.toString(), "Poland", null, LocalDate.of(1992, 11, 11)),
-                new Passenger(1, "Michael", "Jordan", Sex.MALE.toString(), "USA", "Basketball player", LocalDate.of(1966, 11, 10))
+                new Passenger(2, "Ania", "Kowalska", Sex.FEMALE.toString(), "Poland", null, LocalDate.of(1991, 10, 11)),
+                new Passenger(3, "Adam", "Kowalski", Sex.MALE.toString(), "Poland", null, LocalDate.of(1992, 11, 11)),
+                new Passenger(4, "Michael", "Jordan", Sex.MALE.toString(), "USA", "Basketball player", LocalDate.of(1966, 11, 10))
         ).collect(Collectors.toList());
 
     }
@@ -84,5 +85,26 @@ public class PassengerControllerTest {
 
         BDDMockito.verify(passengerService, Mockito.times(1)).findAll();
         BDDMockito.verifyNoMoreInteractions(passengerService);
+    }
+
+    @Test
+    void shouldReturnSpecificPassenger_AfterRequestingWithPathVariable() throws Exception {
+
+        BDDMockito.given(passengerService.getPassengerById(4)).willReturn(passengers.get(3));
+
+        mockMvc.perform(get("/passenger/{passengerId}", 4)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", Matchers.is(4)))
+                .andExpect(jsonPath("$.firstName", is("Michael")))
+                .andExpect(jsonPath("$.lastName", is("Jordan")))
+                .andExpect(jsonPath("$.sex", is("MALE")))
+                .andExpect(jsonPath("$.country", is("USA")))
+                .andExpect(jsonPath("$.notes", is("Basketball player")))
+                .andExpect(jsonPath("$.birthDate", is("1966-11-10")));
+
+        BDDMockito.verify(passengerService, Mockito.times(1)).getPassengerById(4);
+        BDDMockito.verifyNoMoreInteractions(passengerService);
+
     }
 }
