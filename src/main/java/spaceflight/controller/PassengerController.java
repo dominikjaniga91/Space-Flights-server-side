@@ -32,13 +32,13 @@ public class PassengerController {
 
     @PostMapping(value = "/passenger")
     @ResponseStatus(HttpStatus.CREATED)
-    public void saveTourist(@RequestBody Passenger passenger){
+    public void savePassenger(@RequestBody Passenger passenger){
         passengerDao.savePassenger(passenger);
     }
 
     @PutMapping(value = "/passenger")
     @ResponseStatus(HttpStatus.OK)
-    public void updateTourist(@RequestBody Passenger passenger){
+    public void updatePassenger(@RequestBody Passenger passenger){
         passengerDao.updatePassenger(passenger);
     }
 

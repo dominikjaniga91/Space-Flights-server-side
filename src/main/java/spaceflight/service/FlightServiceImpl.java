@@ -24,7 +24,7 @@ public class FlightServiceImpl implements FlightService{
     }
 
     @Override
-    public void updateFlight(Flight flight) {
+    public Flight updateFlight(Flight flight) {
 
         Flight tmpFlight = flightDao.getFlightById(flight.getId())
                 .orElseThrow(() -> new FlightNotFoundException(flight.getId()));
@@ -35,7 +35,7 @@ public class FlightServiceImpl implements FlightService{
         tmpFlight.setNumberOfSeats(flight.getNumberOfSeats());
         tmpFlight.setTicketPrice(flight.getTicketPrice());
 
-        flightDao.save(tmpFlight);
+        return flightDao.save(tmpFlight);
     }
 
     @Override

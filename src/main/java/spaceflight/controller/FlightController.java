@@ -36,8 +36,8 @@ public class FlightController {
 
     @PutMapping("/flight")
     @ResponseStatus(HttpStatus.OK)
-    public void updateFlight(@RequestBody Flight flight) {
-        flightDao.updateFlight(flight);
+    public  ResponseEntity<Flight> updateFlight(@RequestBody Flight flight) {
+       return new ResponseEntity<>(flightDao.updateFlight(flight), HttpStatus.OK);
     }
 
     @DeleteMapping("/flight/{flightId}")
@@ -47,7 +47,7 @@ public class FlightController {
     }
 
     @GetMapping("/flight/{flightId}")
-    public ResponseEntity<Flight> loadPassenger(@PathVariable("flightId") Integer id){
+    public ResponseEntity<Flight> loadFlight(@PathVariable("flightId") Integer id){
         return ResponseEntity.ok(flightDao.getFlightById(id));
     }
 

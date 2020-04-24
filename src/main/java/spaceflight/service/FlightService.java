@@ -17,7 +17,7 @@ public interface FlightService {
 
     List<Passenger> listOfPassengers(int id);
 
-    void updateFlight(Flight flight);
+    Flight updateFlight(Flight flight);
 
     void addPassengersToFlight(int flightId, int[] passengers);
 
