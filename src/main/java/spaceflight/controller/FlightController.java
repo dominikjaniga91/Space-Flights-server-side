@@ -15,12 +15,10 @@ import java.util.*;
 public class FlightController {
 
 
-    private PassengerServiceImpl passengerDao;
     private FlightServiceImpl flightDao;
 
     @Autowired
-    public FlightController(PassengerServiceImpl passengerDao, FlightServiceImpl flightDao) {
-        this.passengerDao = passengerDao;
+    public FlightController(FlightServiceImpl flightDao) {
         this.flightDao = flightDao;
     }
 
