@@ -21,7 +21,7 @@ public class PassengerServiceImpl implements PassengerService {
     FlightRepositoryImpl flightDao;
 
     @Override
-    public void updatePassenger(Passenger passenger) {
+    public Passenger updatePassenger(Passenger passenger) {
 
         Passenger tmpPassenger = passengerDao.getPassengerById(passenger.getId())
                 .orElseThrow(() -> new PassengerNotFoundException(passenger.getId()));
@@ -33,7 +33,7 @@ public class PassengerServiceImpl implements PassengerService {
         tmpPassenger.setNotes(passenger.getNotes());
         tmpPassenger.setBirthDate(passenger.getBirthDate());
 
-        passengerDao.save(tmpPassenger);
+        return passengerDao.save(tmpPassenger);
     }
 
     @Override

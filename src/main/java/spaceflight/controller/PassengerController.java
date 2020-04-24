@@ -34,9 +34,8 @@ public class PassengerController {
     }
 
     @PutMapping(value = "/passenger")
-    @ResponseStatus(HttpStatus.OK)
-    public void updatePassenger(@RequestBody Passenger passenger){
-        passengerDao.updatePassenger(passenger);
+    public ResponseEntity<Passenger> updatePassenger(@RequestBody Passenger passenger){
+        return new ResponseEntity<>(passengerDao.updatePassenger(passenger), HttpStatus.OK);
     }
 
     @DeleteMapping("/passenger/{passengerId}")

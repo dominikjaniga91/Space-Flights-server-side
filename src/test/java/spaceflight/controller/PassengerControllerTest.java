@@ -145,4 +145,19 @@ public class PassengerControllerTest {
 
         BDDMockito.verify(passengerService).deletePassengerById(1);
     }
+
+    @Test
+    void shouldUpdateFlight_afterRequestingRightPath() throws Exception {
+        Passenger passenger =  new Passenger(5, "Michael", "Jordan", Sex.MALE.toString(), "USA", "Basketball player", LocalDate.of(1966, 11, 10));
+        BDDMockito.given(passengerService.updatePassenger(any(Passenger.class))).willReturn(passenger);
+
+        mockMvc.perform(put("/passenger")
+                .content(new ObjectMapper().writeValueAsString(passenger))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        BDDMockito.verify(passengerService, Mockito.times(1)).updatePassenger(any(Passenger.class));
+        BDDMockito.verifyNoMoreInteractions(passengerService);
+
+    }
 }
