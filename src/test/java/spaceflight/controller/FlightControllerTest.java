@@ -22,6 +22,7 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.hamcrest.Matchers.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,9 +39,6 @@ public class FlightControllerTest {
 
     @MockBean
     private FlightServiceImpl flightService;
-
-    @MockBean
-    private PassengerServiceImpl passengerService;
 
     private List<Flight> flights;
 
@@ -76,10 +74,10 @@ public class FlightControllerTest {
         mockMvc.perform(get("/flights")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].destination", Matchers.is("Moon")))
-                .andExpect(jsonPath("$[1].destination", Matchers.is("Jupiter")))
-                .andExpect(jsonPath("$[2].destination", Matchers.is("Mars")))
-                .andExpect(jsonPath("$[3].destination", Matchers.is("Jupiter")));
+                .andExpect(jsonPath("$[0].destination", is("Moon")))
+                .andExpect(jsonPath("$[1].destination", is("Jupiter")))
+                .andExpect(jsonPath("$[2].destination", is("Mars")))
+                .andExpect(jsonPath("$[3].destination", is("Jupiter")));
 
         BDDMockito.verify(flightService, Mockito.times(1)).findAll();
         BDDMockito.verifyNoMoreInteractions(flightService);
@@ -94,11 +92,11 @@ public class FlightControllerTest {
                .contentType(MediaType.APPLICATION_JSON))
                .andExpect(status().isOk())
                .andExpect(jsonPath("$.id", Matchers.is(4)))
-               .andExpect(jsonPath("$.destination", Matchers.is("Jupiter")))
-               .andExpect(jsonPath("$.startDate", Matchers.is("2020-03-25")))
-               .andExpect(jsonPath("$.finishDate", Matchers.is("2020-04-25")))
-               .andExpect(jsonPath("$.numberOfSeats", Matchers.is(15)))
-               .andExpect(jsonPath("$.ticketPrice", Matchers.is(30000.0)));
+               .andExpect(jsonPath("$.destination", is("Jupiter")))
+               .andExpect(jsonPath("$.startDate", is("2020-03-25")))
+               .andExpect(jsonPath("$.finishDate", is("2020-04-25")))
+               .andExpect(jsonPath("$.numberOfSeats", is(15)))
+               .andExpect(jsonPath("$.ticketPrice", is(30000.0)));
 
         BDDMockito.verify(flightService, Mockito.times(1)).getFlightById(anyInt());
         BDDMockito.verifyNoMoreInteractions(flightService);
@@ -115,11 +113,11 @@ public class FlightControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id", Matchers.is(5)))
-                .andExpect(jsonPath("$.destination", Matchers.is("Jupiter")))
-                .andExpect(jsonPath("$.startDate", Matchers.is("2020-04-25")))
-                .andExpect(jsonPath("$.finishDate", Matchers.is("2020-05-25")))
-                .andExpect(jsonPath("$.ticketPrice", Matchers.is(80000.0)));
+                .andExpect(jsonPath("$.id", is(5)))
+                .andExpect(jsonPath("$.destination", is("Jupiter")))
+                .andExpect(jsonPath("$.startDate", is("2020-04-25")))
+                .andExpect(jsonPath("$.finishDate", is("2020-05-25")))
+                .andExpect(jsonPath("$.ticketPrice", is(80000.0)));
 
 
         BDDMockito.verify(flightService, Mockito.times(1)).saveFlight(any(Flight.class));
@@ -170,4 +168,19 @@ public class FlightControllerTest {
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
+
+    @Test void shouldReturnOnePassenger_afterRequestPutPassengerInFlight() throws Exception {
+
+        int[] id = { 1 };
+        Mockito.doNothing().when(flightService).addPassengersToFlight(1, id);
+
+        mockMvc.perform(put("/flight/passengers/{flightId}", 1)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(id)))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+    }
+
+
 }
