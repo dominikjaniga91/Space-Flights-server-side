@@ -45,5 +45,13 @@ public class FlightServiceImplTest {
         Assertions.assertEquals(4, flightRepository.findAll().size());
     }
 
+    @Test
+    void shouldReturnFiveFlights_afterSaveFlightToDatabase(){
+        Flight flight = new Flight("Neptune", LocalDate.of(2020,3,25), LocalDate.of(2021,4,25), 15, 3_000_000.0);
+        flightRepository.save(flight);
+
+        Assertions.assertEquals(5, flightRepository.findAll().size());
+    }
+
 
 }
