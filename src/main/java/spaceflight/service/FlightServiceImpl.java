@@ -70,7 +70,7 @@ public class FlightServiceImpl implements FlightService{
 
 
     @Override
-    public void addPassengersToFlight(int flightId, int[] passengers){
+    public void addPassengersToFlight(int flightId, int... passengers){
 
         Flight flight = flightDao.getFlightById(flightId)
                 .orElseThrow(() -> new FlightNotFoundException(flightId));
