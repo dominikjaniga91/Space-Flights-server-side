@@ -34,10 +34,10 @@ public class PassengerServiceImplTest {
         flightService.saveFlight(flight);
 
         List<Passenger> passengers = Stream.of(
-                new Passenger(1, "Dominik", "Janiga", Sex.MALE.toString(), "Poland", null, LocalDate.of(1990, 11, 11)),
-                new Passenger(2, "Ania", "Kowalska", Sex.FEMALE.toString(), "Poland", null, LocalDate.of(1991, 10, 11)),
-                new Passenger(3, "Adam", "Kowalski", Sex.MALE.toString(), "Poland", null, LocalDate.of(1992, 11, 11)),
-                new Passenger(4, "Michael", "Jordan", Sex.MALE.toString(), "USA", "Basketball player", LocalDate.of(1966, 11, 10))
+                new Passenger("Dominik", "Janiga", Sex.MALE.toString(), "Poland", null, LocalDate.of(1990, 11, 11)),
+                new Passenger("Ania", "Kowalska", Sex.FEMALE.toString(), "Poland", null, LocalDate.of(1991, 10, 11)),
+                new Passenger("Adam", "Kowalski", Sex.MALE.toString(), "Poland", null, LocalDate.of(1992, 11, 11)),
+                new Passenger("Michael", "Jordan", Sex.MALE.toString(), "USA", "Basketball player", LocalDate.of(1966, 11, 10))
         ).collect(Collectors.toList());
 
         passengers.forEach(passenger -> passengerService.savePassenger(passenger));
@@ -48,5 +48,14 @@ public class PassengerServiceImplTest {
     void shouldReturnFourPassengers_afterGetAllPassengersFromDatabase(){
 
         Assertions.assertEquals(4, passengerService.findAll().size());
+    }
+
+    @Test
+    @Order(2)
+    void shouldReturnFivePassengers_afterSavePassengerToDatabase(){
+
+        Passenger passenger = new Passenger("Joanna", "Nowak", Sex.FEMALE.toString(), "Poland", null, LocalDate.of(1995, 11, 11));
+        passengerService.savePassenger(passenger);
+        Assertions.assertEquals(5, passengerService.findAll().size());
     }
 }
