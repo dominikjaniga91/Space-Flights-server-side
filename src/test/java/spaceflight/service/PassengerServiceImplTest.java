@@ -89,4 +89,14 @@ public class PassengerServiceImplTest {
 
     }
 
+    @Test
+    @Order(6)
+    @Transactional
+    void shouldReturnZeroFlights_afterDeleteFLightFromPassenger(){
+
+        passengerService.deleteFlightFromPassenger(1, 1);
+        Assertions.assertEquals(0, passengerService.listOfPassengerFlights(1).size());
+
+    }
+
 }
