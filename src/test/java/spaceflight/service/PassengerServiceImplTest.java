@@ -29,8 +29,8 @@ public class PassengerServiceImplTest {
     PassengerServiceImpl passengerService;
 
     @BeforeAll
-    void setUpData(){
-        Flight flight = new Flight("Jupiter", LocalDate.of(2020,3,25), LocalDate.of(2020,6,25), 15, 30000.0);
+    void setUpData() {
+        Flight flight = new Flight("Jupiter", LocalDate.of(2020, 3, 25), LocalDate.of(2020, 6, 25), 15, 30000.0);
         flightService.saveFlight(flight);
 
         List<Passenger> passengers = Stream.of(
@@ -45,14 +45,14 @@ public class PassengerServiceImplTest {
 
     @Test
     @Order(1)
-    void shouldReturnFourPassengers_afterGetAllPassengersFromDatabase(){
+    void shouldReturnFourPassengers_afterGetAllPassengersFromDatabase() {
 
         Assertions.assertEquals(4, passengerService.findAll().size());
     }
 
     @Test
     @Order(2)
-    void shouldReturnFivePassengers_afterSavePassengerToDatabase(){
+    void shouldReturnFivePassengers_afterSavePassengerToDatabase() {
 
         Passenger passenger = new Passenger("Joanna", "Nowak", Sex.FEMALE.toString(), "Poland", null, LocalDate.of(1995, 11, 11));
         passengerService.savePassenger(passenger);
@@ -61,9 +61,20 @@ public class PassengerServiceImplTest {
 
     @Test
     @Order(3)
-    void shouldReturnFourPassengers_afterDeleteOnePassengerFromDatabase(){
+    void shouldReturnFourPassengers_afterDeleteOnePassengerFromDatabase() {
 
         passengerService.deletePassengerById(5);
         Assertions.assertEquals(4, passengerService.findAll().size());
     }
+
+    @Test
+    @Order(4)
+    void shouldReturnMichaelJordan_afterGetPassengerById() {
+
+        Passenger passenger = passengerService.getPassengerById(4);
+        Assertions.assertEquals("Michael", passenger.getFirstName());
+        Assertions.assertEquals("Jordan", passenger.getLastName());
+
+    }
+
 }
