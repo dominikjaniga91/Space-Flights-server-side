@@ -16,8 +16,6 @@ public class Passenger {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
-    @NotNull
     private Integer id;
 
     @Column(name="first_name")
