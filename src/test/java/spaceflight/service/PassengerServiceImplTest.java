@@ -1,9 +1,11 @@
 package spaceflight.service;
 
+import org.hibernate.Hibernate;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import spaceflight.model.Flight;
@@ -21,6 +23,7 @@ import java.util.stream.Stream;
 @ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class PassengerServiceImplTest {
 
     @Autowired
@@ -95,7 +98,7 @@ public class PassengerServiceImplTest {
     void shouldReturnZeroFlights_afterDeleteFLightFromPassenger(){
 
         passengerService.deleteFlightFromPassenger(1, 1);
-        Assertions.assertEquals(0, passengerService.listOfPassengerFlights(1).size());
+        Assertions.assertEquals(0, flightService.listOfPassengers(1).size());
 
     }
 
