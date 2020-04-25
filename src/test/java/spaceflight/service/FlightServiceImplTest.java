@@ -11,6 +11,7 @@ import spaceflight.model.Passenger;
 import spaceflight.model.Sex;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -31,6 +32,9 @@ public class FlightServiceImplTest {
     @BeforeAll
     void setUpData(){
 
+        Passenger passenger = new Passenger("Dominik", "Janiga", Sex.MALE.toString(), "Poland", null, LocalDate.of(1990, 11, 11));
+        passengerService.savePassenger(passenger);
+
         List<Flight> flights = Stream.of(new Flight("Moon", LocalDate.of(2020,3,25), LocalDate.of(2020,4,25), 15, 15000.0),
                 new Flight("Jupiter", LocalDate.of(2020,3,25), LocalDate.of(2020,6,25), 15, 30000.0),
                 new Flight("Mars", LocalDate.of(2020,3,25), LocalDate.of(2020,4,25), 15, 20000.0),
@@ -43,12 +47,14 @@ public class FlightServiceImplTest {
     @Test
     @Order(1)
     void shouldReturnFourFlights_afterGetAllFlightsFromDatabase(){
+
         Assertions.assertEquals(4, flightService.findAll().size());
     }
 
     @Test
     @Order(2)
     void shouldReturnFiveFlights_afterSaveFlightToDatabase(){
+
         Flight flight = new Flight("Neptune", LocalDate.of(2020,3,25), LocalDate.of(2021,4,25), 15, 3_000_000.0);
         flightService.saveFlight(flight);
         Assertions.assertEquals(5, flightService.findAll().size());
@@ -75,12 +81,19 @@ public class FlightServiceImplTest {
     @Transactional
     void shouldReturnOnePassenger_afterAddPassengerToFlight(){
 
-        Passenger passenger = new Passenger(1, "Dominik", "Janiga", Sex.MALE.toString(), "Poland", null, LocalDate.of(1990, 11, 11));
-        passengerService.savePassenger(passenger);
         flightService.addPassengersToFlight(1, 1);
-
         String passengerName = flightService.listOfPassengers(1).get(0).getFirstName();
         Assertions.assertEquals("Dominik", passengerName);
+
+    }
+
+    @Test
+    @Order(6)
+    @Transactional
+    void shouldReturnZeroPassengers_afterDeletePassengerToFlight(){
+
+        flightService.deletePassengerFromFlight(1, 1);
+        Assertions.assertEquals(0, flightService.listOfPassengers(1).size());
 
     }
 
