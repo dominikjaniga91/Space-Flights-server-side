@@ -19,7 +19,7 @@ public interface PassengerService {
 
     Passenger updatePassenger(Passenger passenger);
 
-    void addFlightsToPassenger(int[] flightsId, int passengerId);
+    void addFlightsToPassenger(int passengerId, int... flights);
 
     void deleteFlightFromPassenger(int flightId, int passengerId);
 }

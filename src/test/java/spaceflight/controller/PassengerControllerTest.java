@@ -178,7 +178,7 @@ public class PassengerControllerTest {
     void shouldReturnStatusOk_afterRequestPutFlightForPassenger() throws Exception {
 
         int[] flightId = { 1 };
-        Mockito.doNothing().when(passengerService).addFlightsToPassenger(flightId, 1);
+        Mockito.doNothing().when(passengerService).addFlightsToPassenger(1, flightId);
 
         mockMvc.perform(put("/passenger/flights/{passengerId}", 1)
                 .contentType(MediaType.APPLICATION_JSON)

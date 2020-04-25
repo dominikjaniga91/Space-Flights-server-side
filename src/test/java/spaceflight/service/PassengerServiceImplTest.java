@@ -10,6 +10,7 @@ import spaceflight.model.Flight;
 import spaceflight.model.Passenger;
 import spaceflight.model.Sex;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -74,6 +75,17 @@ public class PassengerServiceImplTest {
         Passenger passenger = passengerService.getPassengerById(4);
         Assertions.assertEquals("Michael", passenger.getFirstName());
         Assertions.assertEquals("Jordan", passenger.getLastName());
+
+    }
+
+    @Test
+    @Order(5)
+    @Transactional
+    void shouldReturnOneFlight_afterAddFlightToPassenger(){
+
+        passengerService.addFlightsToPassenger(1, 1);
+        String flightDestination = passengerService.listOfPassengerFlights(1).get(0).getDestination();
+        Assertions.assertEquals("Jupiter", flightDestination);
 
     }
 

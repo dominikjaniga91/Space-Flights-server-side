@@ -66,7 +66,7 @@ public class PassengerController {
     @ResponseStatus(HttpStatus.OK)
     public void addFlightToPassenger(@PathVariable("passengerId") Integer passengerId,
                                      @RequestBody int[] flightsId){
-        passengerDao.addFlightsToPassenger(flightsId, passengerId);
+        passengerDao.addFlightsToPassenger(passengerId, flightsId);
 
     }
 }

@@ -71,7 +71,7 @@ public class PassengerServiceImpl implements PassengerService {
 
 
     @Override
-    public void addFlightsToPassenger(int[] flights, int passengerId){
+    public void addFlightsToPassenger(int passengerId, int... flights){
 
         Passenger passenger = passengerDao.getPassengerById(passengerId)
                 .orElseThrow(() -> new PassengerNotFoundException(passengerId));
