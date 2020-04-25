@@ -58,4 +58,12 @@ public class PassengerServiceImplTest {
         passengerService.savePassenger(passenger);
         Assertions.assertEquals(5, passengerService.findAll().size());
     }
+
+    @Test
+    @Order(3)
+    void shouldReturnFourPassengers_afterDeleteOnePassengerFromDatabase(){
+
+        passengerService.deletePassengerById(5);
+        Assertions.assertEquals(4, passengerService.findAll().size());
+    }
 }
