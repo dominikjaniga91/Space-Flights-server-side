@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.TestInstance;
 import org.mockito.Mockito;
+import org.springframework.security.test.context.support.WithMockUser;
 import spaceflight.model.Flight;
 import spaceflight.service.FlightServiceImpl;
 import org.hamcrest.Matchers;
@@ -31,6 +32,7 @@ import java.util.stream.Stream;
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(FlightController.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@WithMockUser(username = "Dominik", roles = {"ADMIN"})
 @DisplayName("Request to flight controller using http method")
 public class FlightControllerTest {
 
@@ -58,7 +60,7 @@ public class FlightControllerTest {
 
         BDDMockito.given(flightService.findAll()).willReturn(flights);
 
-        mockMvc.perform(get("/flights")
+        mockMvc.perform(get("/api/flights")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*", Matchers.hasSize(4)));
@@ -73,7 +75,7 @@ public class FlightControllerTest {
 
         BDDMockito.given(flightService.findAll()).willReturn(flights);
 
-        mockMvc.perform(get("/flights")
+        mockMvc.perform(get("/api/flights")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].destination", is("Moon")))
@@ -91,7 +93,7 @@ public class FlightControllerTest {
 
         BDDMockito.given(flightService.getFlightById(anyInt())).willReturn(flights.get(3));
 
-       mockMvc.perform(get("/flight/{id}", 1)
+       mockMvc.perform(get("/api/flight/{id}", 1)
                .contentType(MediaType.APPLICATION_JSON))
                .andExpect(status().isOk())
                .andExpect(jsonPath("$.id", Matchers.is(4)))
@@ -112,7 +114,7 @@ public class FlightControllerTest {
         Flight flight = new Flight(5,"Jupiter", LocalDate.of(2020,4,25), LocalDate.of(2020,5,25), 15, 80000.0);
         BDDMockito.given(flightService.saveFlight(any(Flight.class))).willReturn(flight);
 
-        mockMvc.perform(post("/flight")
+        mockMvc.perform(post("/api/flight")
                 .content(new ObjectMapper().writeValueAsString(flight))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -135,7 +137,7 @@ public class FlightControllerTest {
 
         BDDMockito.doNothing().when(flightService).deleteFlightById(1);
 
-        mockMvc.perform(delete("/flight/{id}", 1))
+        mockMvc.perform(delete("/api/flight/{id}", 1))
                 .andDo(print())
                 .andExpect(status().isOk());
 
@@ -148,7 +150,7 @@ public class FlightControllerTest {
         Flight flight = new Flight(1,"Neptune", LocalDate.of(2020,4,25), LocalDate.of(2021,5,25), 15, 1_000_000.00);
         BDDMockito.given(flightService.updateFlight(any(Flight.class))).willReturn(flight);
 
-        mockMvc.perform(put("/flight")
+        mockMvc.perform(put("/api/flight")
                 .content(new ObjectMapper().writeValueAsString(flight))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -169,7 +171,7 @@ public class FlightControllerTest {
                 " \"numberOfSeats\": \"ffffff,\n" +
                 " \"ticketPrice\": \"ffffff\"}";
 
-        mockMvc.perform(post("/flight")
+        mockMvc.perform(post("/api/flight")
                 .content(flight)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -183,7 +185,7 @@ public class FlightControllerTest {
         int[] id = { 1 };
         Mockito.doNothing().when(flightService).addPassengersToFlight(1, id);
 
-        mockMvc.perform(put("/flight/passengers/{flightId}", 1)
+        mockMvc.perform(put("/api/flight/passengers/{flightId}", 1)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(id)))
                 .andDo(print())
@@ -196,7 +198,7 @@ public class FlightControllerTest {
     void shouldReturnStatusOk_afterRequestDeletePassengerFromFlight() throws Exception {
 
         BDDMockito.doNothing().when(flightService).deletePassengerFromFlight(1, 1);
-        mockMvc.perform(delete("/flight/passengers/{flightId}/{passengerId}", 1, 1))
+        mockMvc.perform(delete("/api/flight/passengers/{flightId}/{passengerId}", 1, 1))
                 .andDo(print())
                 .andExpect(status().isOk());
 

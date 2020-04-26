@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import spaceflight.model.Passenger;
@@ -32,6 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(PassengerController.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@WithMockUser(username = "Dominik", roles = {"ADMIN"})
 @DisplayName("Request to passenger controller using http method")
 public class PassengerControllerTest {
 
@@ -62,7 +64,7 @@ public class PassengerControllerTest {
 
         BDDMockito.given(passengerService.findAll()).willReturn(passengers);
 
-        mockMvc.perform(get("/passengers")
+        mockMvc.perform(get("/api/passengers")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*", Matchers.hasSize(4)));
@@ -77,7 +79,7 @@ public class PassengerControllerTest {
 
         BDDMockito.given(passengerService.findAll()).willReturn(passengers);
 
-        mockMvc.perform(get("/passengers")
+        mockMvc.perform(get("/api/passengers")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].firstName", is("Dominik")))
@@ -95,7 +97,7 @@ public class PassengerControllerTest {
 
         BDDMockito.given(passengerService.getPassengerById(4)).willReturn(passengers.get(3));
 
-        mockMvc.perform(get("/passenger/{passengerId}", 4)
+        mockMvc.perform(get("/api/passenger/{passengerId}", 4)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", Matchers.is(4)))
@@ -117,7 +119,7 @@ public class PassengerControllerTest {
         Passenger passenger =  new Passenger(5, "Michael", "Jordan", Sex.MALE.toString(), "USA", "Basketball player", LocalDate.of(1966, 11, 10));
         BDDMockito.given(passengerService.savePassenger(any(Passenger.class))).willReturn(passenger);
 
-        mockMvc.perform(post("/passenger")
+        mockMvc.perform(post("/api/passenger")
                 .content(new ObjectMapper().writeValueAsString(passenger))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -141,7 +143,7 @@ public class PassengerControllerTest {
 
         BDDMockito.doNothing().when(passengerService).deletePassengerById(1);
 
-        mockMvc.perform(delete("/passenger/{passengerId}", 1))
+        mockMvc.perform(delete("/api/passenger/{passengerId}", 1))
                 .andDo(print())
                 .andExpect(status().isOk());
 
@@ -154,7 +156,7 @@ public class PassengerControllerTest {
         Passenger passenger =  new Passenger(5, "Michael", "Jordan", Sex.MALE.toString(), "USA", "Basketball player", LocalDate.of(1966, 11, 10));
         BDDMockito.given(passengerService.updatePassenger(any(Passenger.class))).willReturn(passenger);
 
-        mockMvc.perform(put("/passenger")
+        mockMvc.perform(put("/api/passenger")
                 .content(new ObjectMapper().writeValueAsString(passenger))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -176,7 +178,7 @@ public class PassengerControllerTest {
                 " \"notes\": \"ffffff,\n" +
                 " \"birthDate\": \"ffffff\"}";
 
-        mockMvc.perform(post("/passenger")
+        mockMvc.perform(post("/api/passenger")
                 .content(flight)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -190,7 +192,7 @@ public class PassengerControllerTest {
         int[] flightId = { 1 };
         Mockito.doNothing().when(passengerService).addFlightsToPassenger(1, flightId);
 
-        mockMvc.perform(put("/passenger/flights/{passengerId}", 1)
+        mockMvc.perform(put("/api/passenger/flights/{passengerId}", 1)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(flightId)))
                 .andDo(print())
@@ -203,7 +205,7 @@ public class PassengerControllerTest {
     void shouldReturnStatusOk_afterRequestDeletePassengerFromFlight() throws Exception {
 
         BDDMockito.doNothing().when(passengerService).deleteFlightFromPassenger(1, 1);
-        mockMvc.perform(delete("/passenger/flights/{passengerId}/{flightId}", 1, 1))
+        mockMvc.perform(delete("/api/passenger/flights/{passengerId}/{flightId}", 1, 1))
                 .andDo(print())
                 .andExpect(status().isOk());
         BDDMockito.verify(passengerService).deleteFlightFromPassenger(1,1);

@@ -12,6 +12,7 @@ import java.util.*;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
+@RequestMapping("/api")
 public class FlightController {
 
 
