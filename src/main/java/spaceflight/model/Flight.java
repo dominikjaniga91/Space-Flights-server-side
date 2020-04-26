@@ -9,6 +9,7 @@ import spaceflight.model.validation.StartFinishDate;
 import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -39,6 +40,7 @@ public class Flight {
 
     @Column(name="number_of_seats")
     @NotNull
+    @Positive
     private int numberOfSeats;
 
 
@@ -54,6 +56,7 @@ public class Flight {
 
     @Column(name="ticket_price")
     @NotNull
+    @Positive
     private double ticketPrice;
 
     public Flight() {
