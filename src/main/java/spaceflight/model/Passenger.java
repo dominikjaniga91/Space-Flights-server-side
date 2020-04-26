@@ -40,6 +40,7 @@ public class Passenger {
     @Column(name="birth_date")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @JsonSerialize(using = LocalDateSerializer.class)
+    @NotNull
     private LocalDate birthDate;
 
     @JsonIgnore
