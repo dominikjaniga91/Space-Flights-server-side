@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import spaceflight.exception.PassengerNotFoundException;
 import spaceflight.model.Flight;
 import spaceflight.model.Passenger;
 import spaceflight.model.Sex;
@@ -105,6 +106,16 @@ public class PassengerServiceImplTest {
         passengerService.deleteFlightFromPassenger(1, 1);
         Assertions.assertEquals(0, flightService.listOfPassengers(1).size());
 
+    }
+
+    @Test
+    @Order(7)
+    @DisplayName("passenger not found exception after request with non existing id")
+    @Transactional
+    void shouldReturnException_afterRequestWithBadId(){
+        PassengerNotFoundException exception=  Assertions.assertThrows(PassengerNotFoundException.class,
+                                                 () -> passengerService.getPassengerById(100));
+        Assertions.assertEquals(exception.getMessage(), "Passenger ID: 100 doesn't exist");
     }
 
 }

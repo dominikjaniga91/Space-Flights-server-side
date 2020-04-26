@@ -36,7 +36,7 @@ public class SecurityTest {
     @Nested
     @DisplayName("admin role")
     @WithMockUser(username = "Dominik", roles = {"ADMIN"})
-    class Admin{
+    class Admin {
 
         @Test
         @DisplayName("has access to GET method")
@@ -48,7 +48,7 @@ public class SecurityTest {
         @Test
         @DisplayName("has access to POST method")
         void shouldAuthenticatedUser_afterPostRequest() throws Exception {
-            Passenger passenger =  new Passenger(5, "Michael", "Jordan", Sex.MALE.toString(), "USA", "Basketball player", LocalDate.of(1966, 11, 10));
+            Passenger passenger = new Passenger(5, "Michael", "Jordan", Sex.MALE.toString(), "USA", "Basketball player", LocalDate.of(1966, 11, 10));
             BDDMockito.given(passengerService.savePassenger(any(Passenger.class))).willReturn(passenger);
 
             mockMvc.perform(post("/api/passenger")
@@ -69,7 +69,7 @@ public class SecurityTest {
         @Test
         @DisplayName("has access to PUT method")
         void shouldAuthenticatedUser_afterPutRequest() throws Exception {
-            Passenger passenger =  new Passenger(5, "Michael", "Jordan", Sex.MALE.toString(), "USA", "Basketball player", LocalDate.of(1966, 11, 10));
+            Passenger passenger = new Passenger(5, "Michael", "Jordan", Sex.MALE.toString(), "USA", "Basketball player", LocalDate.of(1966, 11, 10));
             BDDMockito.given(passengerService.savePassenger(any(Passenger.class))).willReturn(passenger);
 
             mockMvc.perform(put("/api/passenger")
@@ -81,9 +81,9 @@ public class SecurityTest {
     }
 
     @Nested
-    @DisplayName("manager role")
-    @WithMockUser(username = "Darek", roles = {"MANAGER"})
-    class Manager{
+    @DisplayName("manager or employee role")
+    @WithMockUser(username = "Darek", roles = {"MANAGER", "EMPLOYEE"})
+    class Manager {
 
         @Test
         @DisplayName("has access to GET method")
@@ -95,7 +95,7 @@ public class SecurityTest {
         @Test
         @DisplayName("has access to POST method")
         void shouldAuthenticatedUser_afterPostRequest() throws Exception {
-            Passenger passenger =  new Passenger(5, "Michael", "Jordan", Sex.MALE.toString(), "USA", "Basketball player", LocalDate.of(1966, 11, 10));
+            Passenger passenger = new Passenger(5, "Michael", "Jordan", Sex.MALE.toString(), "USA", "Basketball player", LocalDate.of(1966, 11, 10));
             BDDMockito.given(passengerService.savePassenger(any(Passenger.class))).willReturn(passenger);
 
             mockMvc.perform(post("/api/passenger")
@@ -116,7 +116,7 @@ public class SecurityTest {
         @Test
         @DisplayName("has access to PUT method")
         void shouldAuthenticatedUser_afterPutRequest() throws Exception {
-            Passenger passenger =  new Passenger(5, "Michael", "Jordan", Sex.MALE.toString(), "USA", "Basketball player", LocalDate.of(1966, 11, 10));
+            Passenger passenger = new Passenger(5, "Michael", "Jordan", Sex.MALE.toString(), "USA", "Basketball player", LocalDate.of(1966, 11, 10));
             BDDMockito.given(passengerService.savePassenger(any(Passenger.class))).willReturn(passenger);
 
             mockMvc.perform(put("/api/passenger")
@@ -124,8 +124,5 @@ public class SecurityTest {
                     .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk());
         }
-
     }
-
-
 }
