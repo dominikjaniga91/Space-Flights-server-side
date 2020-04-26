@@ -49,7 +49,7 @@ public class FlightServiceImplTest {
 
     @Test
     @Order(1)
-    @DisplayName("right amount of flights ")
+    @DisplayName("right amount of flights after get all ")
     void shouldReturnFourFlights_afterGetAllFlightsFromDatabase(){
 
         Assertions.assertEquals(4, flightService.findAll().size());

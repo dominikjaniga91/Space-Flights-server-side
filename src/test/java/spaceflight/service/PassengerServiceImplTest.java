@@ -1,6 +1,5 @@
 package spaceflight.service;
 
-import org.hibernate.Hibernate;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import spaceflight.model.Flight;
 import spaceflight.model.Passenger;
 import spaceflight.model.Sex;
-
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
@@ -24,6 +22,7 @@ import java.util.stream.Stream;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+@DisplayName("Integration test with database should return")
 public class PassengerServiceImplTest {
 
     @Autowired
@@ -49,6 +48,7 @@ public class PassengerServiceImplTest {
 
     @Test
     @Order(1)
+    @DisplayName("right amount of passengers after get all ")
     void shouldReturnFourPassengers_afterGetAllPassengersFromDatabase() {
 
         Assertions.assertEquals(4, passengerService.findAll().size());
@@ -56,6 +56,7 @@ public class PassengerServiceImplTest {
 
     @Test
     @Order(2)
+    @DisplayName("one more passenger after save")
     void shouldReturnFivePassengers_afterSavePassengerToDatabase() {
 
         Passenger passenger = new Passenger("Joanna", "Nowak", Sex.FEMALE.toString(), "Poland", null, LocalDate.of(1995, 11, 11));
@@ -65,6 +66,7 @@ public class PassengerServiceImplTest {
 
     @Test
     @Order(3)
+    @DisplayName("one passenger less after delete ")
     void shouldReturnFourPassengers_afterDeleteOnePassengerFromDatabase() {
 
         passengerService.deletePassengerById(5);
@@ -73,6 +75,7 @@ public class PassengerServiceImplTest {
 
     @Test
     @Order(4)
+    @DisplayName("Michael Jordan after get passenger by id")
     void shouldReturnMichaelJordan_afterGetPassengerById() {
 
         Passenger passenger = passengerService.getPassengerById(4);
@@ -83,6 +86,7 @@ public class PassengerServiceImplTest {
 
     @Test
     @Order(5)
+    @DisplayName("one flight after add flight to passenger")
     @Transactional
     void shouldReturnOneFlight_afterAddFlightToPassenger(){
 
@@ -94,6 +98,7 @@ public class PassengerServiceImplTest {
 
     @Test
     @Order(6)
+    @DisplayName("zero flights after delete flight from passenger")
     @Transactional
     void shouldReturnZeroFlights_afterDeleteFLightFromPassenger(){
 
