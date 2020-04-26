@@ -80,5 +80,52 @@ public class SecurityTest {
 
     }
 
+    @Nested
+    @DisplayName("manager role")
+    @WithMockUser(username = "Darek", roles = {"MANAGER"})
+    class Manager{
+
+        @Test
+        @DisplayName("has access to GET method")
+        void shouldAuthenticatedUser_afterGetRequest() throws Exception {
+            mockMvc.perform(get("/api/passengers"))
+                    .andExpect(status().isOk());
+        }
+
+        @Test
+        @DisplayName("has access to POST method")
+        void shouldAuthenticatedUser_afterPostRequest() throws Exception {
+            Passenger passenger =  new Passenger(5, "Michael", "Jordan", Sex.MALE.toString(), "USA", "Basketball player", LocalDate.of(1966, 11, 10));
+            BDDMockito.given(passengerService.savePassenger(any(Passenger.class))).willReturn(passenger);
+
+            mockMvc.perform(post("/api/passenger")
+                    .content(new ObjectMapper().writeValueAsString(passenger))
+                    .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isCreated());
+        }
+
+        @Test
+        @DisplayName("has NOT access to DELETE method")
+        void shouldAuthenticatedUser_afterDeleteRequest() throws Exception {
+            BDDMockito.doNothing().when(passengerService).deletePassengerById(1);
+
+            mockMvc.perform(delete("/api/passenger/{passengerId}", 1))
+                    .andExpect(status().isForbidden());
+        }
+
+        @Test
+        @DisplayName("has access to PUT method")
+        void shouldAuthenticatedUser_afterPutRequest() throws Exception {
+            Passenger passenger =  new Passenger(5, "Michael", "Jordan", Sex.MALE.toString(), "USA", "Basketball player", LocalDate.of(1966, 11, 10));
+            BDDMockito.given(passengerService.savePassenger(any(Passenger.class))).willReturn(passenger);
+
+            mockMvc.perform(put("/api/passenger")
+                    .content(new ObjectMapper().writeValueAsString(passenger))
+                    .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk());
+        }
+
+    }
+
 
 }
