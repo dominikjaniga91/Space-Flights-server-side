@@ -1,5 +1,6 @@
 package spaceflight.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -10,19 +11,22 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import spaceflight.service.UserDetailServiceImpl;
 
 
 @Configuration
-@EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private UserDetailServiceImpl userDetailService;
+
+    @Autowired
+    public WebSecurityConfig(UserDetailServiceImpl userDetailService) {
+        this.userDetailService = userDetailService;
+    }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("Dominik").password("dominik123").roles("ADMIN").and()
-                .withUser("Darek").password("darek123").roles("MANAGER").and()
-                .withUser("Joanna").password("joanna123").roles("EMPLOYEE");
+        auth.userDetailsService(userDetailService);
     }
 
 
@@ -41,8 +45,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                .antMatchers(HttpMethod.PUT, "/api/**").hasAnyRole("ADMIN", "EMPLOYEE", "MANAGER")
                .anyRequest().authenticated();
 
-
-        http.csrf().disable();
     }
 
     @Bean
