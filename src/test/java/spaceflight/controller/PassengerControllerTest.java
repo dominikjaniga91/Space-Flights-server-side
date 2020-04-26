@@ -3,6 +3,7 @@ package spaceflight.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,6 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(PassengerController.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@DisplayName("Request to passenger controller using http method")
 public class PassengerControllerTest {
 
 
@@ -55,6 +57,7 @@ public class PassengerControllerTest {
     }
 
     @Test
+    @DisplayName("get should return status ok and right amount of passengers")
     void shouldReturnSizeOfPassengersList_afterRequestingRightPathToController() throws Exception {
 
         BDDMockito.given(passengerService.findAll()).willReturn(passengers);
@@ -69,6 +72,7 @@ public class PassengerControllerTest {
     }
 
     @Test
+    @DisplayName("get should return status ok and JSON objects and verify method")
     void shouldReturnFlightsListAsJson_afterRequestingRightPathToController() throws Exception {
 
         BDDMockito.given(passengerService.findAll()).willReturn(passengers);
@@ -86,6 +90,7 @@ public class PassengerControllerTest {
     }
 
     @Test
+    @DisplayName("get with id parameter should return status ok, JSON object and verify method")
     void shouldReturnSpecificPassenger_AfterRequestingWithPathVariable() throws Exception {
 
         BDDMockito.given(passengerService.getPassengerById(4)).willReturn(passengers.get(3));
@@ -107,6 +112,7 @@ public class PassengerControllerTest {
     }
 
     @Test
+    @DisplayName("post should return status created, save JSON object and verify method")
     void shouldReturnPassenger_afterRequestForSavePassenger() throws Exception {
         Passenger passenger =  new Passenger(5, "Michael", "Jordan", Sex.MALE.toString(), "USA", "Basketball player", LocalDate.of(1966, 11, 10));
         BDDMockito.given(passengerService.savePassenger(any(Passenger.class))).willReturn(passenger);
@@ -130,6 +136,7 @@ public class PassengerControllerTest {
     }
 
     @Test
+    @DisplayName("delete with id parameter should return status ok and verify method")
     void shouldDeletePassenger_afterRequestingRightPath() throws Exception {
 
         BDDMockito.doNothing().when(passengerService).deletePassengerById(1);
@@ -142,6 +149,7 @@ public class PassengerControllerTest {
     }
 
     @Test
+    @DisplayName("put should return status ok and verify method")
     void shouldUpdatePassenger_afterRequestingRightPath() throws Exception {
         Passenger passenger =  new Passenger(5, "Michael", "Jordan", Sex.MALE.toString(), "USA", "Basketball player", LocalDate.of(1966, 11, 10));
         BDDMockito.given(passengerService.updatePassenger(any(Passenger.class))).willReturn(passenger);
@@ -157,6 +165,7 @@ public class PassengerControllerTest {
     }
 
     @Test
+    @DisplayName("post should return bad request after send invalid data")
     void shouldReturnBadRequest_afterSendRequestWithBadData() throws Exception {
 
         String flight = "{\"id\": \"dfwwd\",\n" +
@@ -175,6 +184,7 @@ public class PassengerControllerTest {
     }
 
     @Test
+    @DisplayName("put with flight and passenger id should return status ok")
     void shouldReturnStatusOk_afterRequestPutFlightForPassenger() throws Exception {
 
         int[] flightId = { 1 };
@@ -189,6 +199,7 @@ public class PassengerControllerTest {
     }
 
     @Test
+    @DisplayName("delete with flight and passenger id should return status ok")
     void shouldReturnStatusOk_afterRequestDeletePassengerFromFlight() throws Exception {
 
         BDDMockito.doNothing().when(passengerService).deleteFlightFromPassenger(1, 1);

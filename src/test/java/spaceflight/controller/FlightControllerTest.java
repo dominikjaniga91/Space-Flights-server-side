@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(FlightController.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -197,7 +196,6 @@ public class FlightControllerTest {
     void shouldReturnStatusOk_afterRequestDeletePassengerFromFlight() throws Exception {
 
         BDDMockito.doNothing().when(flightService).deletePassengerFromFlight(1, 1);
-
         mockMvc.perform(delete("/flight/passengers/{flightId}/{passengerId}", 1, 1))
                 .andDo(print())
                 .andExpect(status().isOk());
