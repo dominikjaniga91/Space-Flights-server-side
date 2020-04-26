@@ -23,6 +23,7 @@ import java.util.stream.Stream;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+@DisplayName("Integration test with database should return")
 public class FlightServiceImplTest {
 
     @Autowired
@@ -48,6 +49,7 @@ public class FlightServiceImplTest {
 
     @Test
     @Order(1)
+    @DisplayName("right amount of flights ")
     void shouldReturnFourFlights_afterGetAllFlightsFromDatabase(){
 
         Assertions.assertEquals(4, flightService.findAll().size());
@@ -55,6 +57,7 @@ public class FlightServiceImplTest {
 
     @Test
     @Order(2)
+    @DisplayName("one more flight after save")
     void shouldReturnFiveFlights_afterSaveFlightToDatabase(){
 
         Flight flight = new Flight("Neptune", LocalDate.of(2020,3,25), LocalDate.of(2021,4,25), 15, 3_000_000.0);
@@ -64,6 +67,7 @@ public class FlightServiceImplTest {
 
     @Test
     @Order(3)
+    @DisplayName("one flight less after delete ")
     void shouldReturnFourFlight_afterDeleteOneFlightFromDatabase(){
 
         flightService.deleteFlightById(5);
@@ -72,6 +76,7 @@ public class FlightServiceImplTest {
 
     @Test
     @Order(4)
+    @DisplayName("flight to Moon after get flight by id")
     void shouldReturnFlightToMoon_afterGetFlightById(){
 
         Flight flight =  flightService.getFlightById(1);
@@ -80,6 +85,7 @@ public class FlightServiceImplTest {
 
     @Test
     @Order(5)
+    @DisplayName("one passenger after add passenger to flight")
     @Transactional
     void shouldReturnOnePassenger_afterAddPassengerToFlight(){
 
@@ -91,6 +97,7 @@ public class FlightServiceImplTest {
 
     @Test
     @Order(6)
+    @DisplayName("zero passengers after delete passenger from flight")
     @Transactional
     void shouldReturnZeroPassengers_afterDeletePassengerToFlight(){
 

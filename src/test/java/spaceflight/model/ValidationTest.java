@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @DisplayName("Throws an validation exception when")
-public class FlightValidationTest {
+public class ValidationTest {
 
     @Autowired
     FlightServiceImpl flightService;
