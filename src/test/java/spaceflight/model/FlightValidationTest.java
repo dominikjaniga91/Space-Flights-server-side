@@ -16,7 +16,7 @@ import java.time.LocalDate;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-@DisplayName("Flight throws a validation exception when")
+@DisplayName("Throws an validation exception when fhilgt's")
 public class FlightValidationTest {
 
     @Autowired
@@ -27,8 +27,16 @@ public class FlightValidationTest {
 
     @Test
     @DisplayName("start and finish date are the same")
-    void shouldThrowsValidationException_afterSaveFlightWithInvalidData(){
+    void shouldThrowsValidationException_afterSaveFlightWithTheSameData(){
         Flight flight = new Flight("Neptune", LocalDate.of(2020,3,25), LocalDate.of(2020,3,25), 15, 3_000_000.0);
+
+        Assertions.assertThrows(ConstraintViolationException.class, () -> flightService.saveFlight(flight));
+    }
+
+    @Test
+    @DisplayName("finish date are earlier than start date")
+    void shouldThrowsValidationException_afterSaveFlightWithInvalidData(){
+        Flight flight = new Flight("Neptune", LocalDate.of(2020,3,25), LocalDate.of(2019,3,25), 15, 3_000_000.0);
 
         Assertions.assertThrows(ConstraintViolationException.class, () -> flightService.saveFlight(flight));
     }
