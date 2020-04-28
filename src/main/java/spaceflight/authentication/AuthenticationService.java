@@ -1,9 +1,12 @@
 package spaceflight.authentication;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import spaceflight.authentication.model.User;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,30 +19,34 @@ public class AuthenticationService {
     static final String SIGNING_KEY = "SecretKey";
     static final String PREFIX = "Bearer";
 
-    static public void addToken(HttpServletResponse response, String username){
-        String JwtToken = Jwts.builder().setSubject(username)
+    static public void addToken(HttpServletResponse response, User user){
+        String JwtToken = Jwts.builder().setSubject(user.getUsername())
+                .claim("role", user.getRole())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(SignatureAlgorithm.HS512, SIGNING_KEY)
                 .compact();
 
         response.addHeader("Authorization", PREFIX + " " + JwtToken);
         response.addHeader("Access-Control-Expose-Headers", "Authorization");
+
     }
 
 
     static public Authentication getAuthentication(HttpServletRequest request){
 
         String token = request.getHeader("Authorization");
-        System.out.println("token: " + token );
+
         if( token != null){
-            String user = Jwts.parser()
+            Claims claims  = Jwts.parser()
                     .setSigningKey(SIGNING_KEY)
                     .parseClaimsJws(token.replace(PREFIX, ""))
-                    .getBody()
-                    .getSubject();
+                    .getBody();
 
-            if(user != null)
-                return new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
+            String role = "ROLE_" + claims.get("role").toString();
+            String username = claims.getSubject();
+
+            if(username != null)
+                return new UsernamePasswordAuthenticationToken(username, null, Collections.singleton(new SimpleGrantedAuthority(role)));
 
         }
         return null;

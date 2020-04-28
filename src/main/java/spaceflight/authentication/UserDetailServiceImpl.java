@@ -12,11 +12,9 @@ import spaceflight.repository.UserRepositoryImpl;
 public class UserDetailServiceImpl implements UserDetailsService {
 
     private UserRepositoryImpl userRepository;
-    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserDetailServiceImpl(UserRepositoryImpl userRepository, PasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
+    public UserDetailServiceImpl(UserRepositoryImpl userRepository) {
         this.userRepository = userRepository;
     }
 
