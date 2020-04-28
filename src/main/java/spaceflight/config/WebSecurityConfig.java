@@ -11,6 +11,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import spaceflight.authentication.filter.AuthenticationFilter;
+import spaceflight.authentication.filter.LoginFilter;
 import spaceflight.service.UserDetailServiceImpl;
 
 
@@ -34,7 +37,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-       http.csrf().disable()
+            http.cors()
+               .and().csrf().disable()
                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                .and()
                .authorizeRequests()
@@ -43,7 +47,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                .antMatchers(HttpMethod.GET, "/api/**").hasAnyRole("ADMIN", "EMPLOYEE", "MANAGER")
                .antMatchers(HttpMethod.DELETE, "/api/**").hasAnyRole("ADMIN")
                .antMatchers(HttpMethod.PUT, "/api/**").hasAnyRole("ADMIN", "EMPLOYEE", "MANAGER")
-               .anyRequest().authenticated();
+               .anyRequest().authenticated()
+               .and()
+                .addFilterBefore(new LoginFilter("/login", authenticationManager()),
+                UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new AuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
     }
 
