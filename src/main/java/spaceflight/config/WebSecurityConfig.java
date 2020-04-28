@@ -23,6 +23,7 @@ import java.util.Arrays;
 
 
 @Configuration
+@EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private UserDetailServiceImpl userDetailService;

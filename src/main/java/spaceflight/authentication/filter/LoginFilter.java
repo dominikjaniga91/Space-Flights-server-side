@@ -9,6 +9,7 @@ import org.springframework.security.web.authentication.AbstractAuthenticationPro
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import spaceflight.authentication.AuthenticationService;
 import spaceflight.authentication.model.AccountCredentials;
+import spaceflight.authentication.model.User;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -26,8 +27,8 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
-        AccountCredentials credentials = new ObjectMapper()
-                .readValue(request.getInputStream(), AccountCredentials.class);
+        User credentials = new ObjectMapper()
+                .readValue(request.getInputStream(), User.class);
 
         return getAuthenticationManager().authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -44,6 +45,7 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
                                             FilterChain chain,
                                             Authentication authResult) {
 
-        AuthenticationService.addToken(response, authResult.getName());
+        User user = (User)authResult.getPrincipal();
+        AuthenticationService.addToken(response, user);
     }
 }
