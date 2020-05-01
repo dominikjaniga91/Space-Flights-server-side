@@ -17,7 +17,9 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import spaceflight.authentication.filter.AuthenticationFilter;
 import spaceflight.authentication.filter.LoginFilter;
-import spaceflight.service.UserDetailServiceImpl;
+import spaceflight.authentication.UserDetailServiceImpl;
+import spaceflight.exception.RestAuthenticationEntryPoint;
+//import spaceflight.exception.UserNotFoundException;
 
 import java.util.Arrays;
 
@@ -58,6 +60,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(new LoginFilter("/login", authenticationManager()),
                 UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new AuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+//                .exceptionHandling().authenticationEntryPoint(new RestAuthenticationEntryPoint());
 
     }
 

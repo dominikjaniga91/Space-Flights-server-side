@@ -40,7 +40,7 @@ public class Flight {
 
     @Column(name="number_of_seats")
     @NotNull
-    @Positive
+    @Positive(message = "Number of seats cannot be negative")
     private int numberOfSeats;
 
 
@@ -56,7 +56,7 @@ public class Flight {
 
     @Column(name="ticket_price")
     @NotNull
-    @Positive
+    @Positive(message = "Ticket price cannot be negative")
     private double ticketPrice;
 
     public Flight() {

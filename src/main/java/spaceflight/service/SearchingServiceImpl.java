@@ -1,7 +1,7 @@
 package spaceflight.service;
 
-import spaceflight.exception.InvalidFlightDataException;
-import spaceflight.exception.InvalidPassengerDataException;
+import spaceflight.exception.InvalidSearchFlightDataException;
+import spaceflight.exception.InvalidSearchPassengerDataException;
 import spaceflight.model.Flight;
 import spaceflight.model.Passenger;
 import spaceflight.repository.FlightRepositoryImpl;
@@ -40,7 +40,7 @@ public class SearchingServiceImpl {
         }else if(destination != null && startDate != null){
             flightList = flightDao.getFlightsByDestinationAndStartDateIsGreaterThanEqual(destination, startDate);
         } else{
-            throw new InvalidFlightDataException(startDate, finishDate, destination);
+            throw new InvalidSearchFlightDataException(startDate, finishDate, destination);
         }
 
         return flightList;
@@ -65,7 +65,7 @@ public class SearchingServiceImpl {
         }else if(birthDate == null && firstName != null){
             passengerList = passengerDao.getPassengersByFirstName(firstName);
         }else{
-            throw new InvalidPassengerDataException(firstName, lastName, birthDate);
+            throw new InvalidSearchPassengerDataException(firstName, lastName, birthDate);
         }
 
         return passengerList;
