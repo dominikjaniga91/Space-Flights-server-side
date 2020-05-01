@@ -1,49 +1,80 @@
 package spaceflight.exception;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import java.time.LocalDateTime;
+import java.util.Arrays;
 
-@RestControllerAdvice
-public class GlobalExceptionHandler {
+@ControllerAdvice
+public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(PassengerNotFoundException.class)
-    public ResponseEntity<String> getPassengerNotFoundExceptionHandler(PassengerNotFoundException ex){
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    @Override
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        var errors = getCustomErrorMessage(HttpStatus.BAD_REQUEST, ex.getMostSpecificCause().toString() , ex.getClass().toString());
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
+    private CustomErrorMessage getCustomErrorMessage(HttpStatus status, String message, String developerMessage) {
+        var errors = new CustomErrorMessage();
+        errors.setStatus(status.value());
+        errors.setDetail(message);
+        errors.setTimestamp(LocalDateTime.now());
+        errors.setDeveloperMessage(developerMessage);
+
+        return errors;
+    }
+
+    @ExceptionHandler(PassengerNotFoundException.class)
+    public ResponseEntity<CustomErrorMessage> getPassengerNotFoundExceptionHandler(PassengerNotFoundException ex){
+
+        var errors = getCustomErrorMessage(HttpStatus.NOT_FOUND, ex.getMessage(), ex.getClass().toString());
+        return new ResponseEntity<>(errors, HttpStatus.NOT_FOUND);
+    }
+
+
+
     @ExceptionHandler(FlightNotFoundException.class)
-    public ResponseEntity<String> getFlightNotFoundExceptionHandler(FlightNotFoundException ex){
-        return  new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    public ResponseEntity<CustomErrorMessage> getFlightNotFoundExceptionHandler(FlightNotFoundException ex){
+
+        var errors = getCustomErrorMessage(HttpStatus.NOT_FOUND, ex.getMessage(), ex.getClass().toString());
+        return  new ResponseEntity<>(errors, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(InvalidSearchPassengerDataException.class)
-    public ResponseEntity<String> getInvalidSearchPassengerDataExceptionHandler(InvalidSearchPassengerDataException ex){
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<CustomErrorMessage> getInvalidSearchPassengerDataExceptionHandler(InvalidSearchPassengerDataException ex){
+
+        CustomErrorMessage errors = getCustomErrorMessage(HttpStatus.BAD_REQUEST, ex.getMessage(), ex.getClass().toString());
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(InvalidSearchFlightDataException.class)
-    public ResponseEntity<String> getInvalidSearchFlightDataExceptionHandler(InvalidSearchFlightDataException ex){
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<CustomErrorMessage> getInvalidSearchFlightDataExceptionHandler(InvalidSearchFlightDataException ex){
+
+        var errors = getCustomErrorMessage(HttpStatus.BAD_REQUEST, ex.getMessage(), ex.getClass().toString());
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<String> getConstraintViolationExceptionHandler(ConstraintViolationException ex){
+    public ResponseEntity<CustomErrorMessage> getConstraintViolationExceptionHandler(ConstraintViolationException ex, WebRequest request){
         var violations =  ex.getConstraintViolations();
         var message = violations.stream()
                                 .map(ConstraintViolation::getMessageTemplate)
                                 .findFirst()
                                 .orElse("Data error");
-        return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+
+        var errors = getCustomErrorMessage(HttpStatus.BAD_REQUEST, message, violations.toString());
+               return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
 
     }
 
-    @ExceptionHandler(InternalAuthenticationServiceException.class)
-    public ResponseEntity<String> getUserNotExistExceptionHandler(InternalAuthenticationServiceException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
-    }
 }

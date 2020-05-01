@@ -1,15 +1,13 @@
 package spaceflight.model;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonFormat;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import spaceflight.model.validation.StartFinishDate;
 import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -23,25 +21,24 @@ public class Flight {
     private Integer id;
 
     @Column(name="destination")
-    @NotNull
+    @NotBlank(message = "Destination cannot be empty")
     private String destination;
 
     @Column(name="start_date")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @NotNull
+    @Future(message = "Departure date cannot be past")
     @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate startDate;
 
     @Column(name="finish_date")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @NotNull
     @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate finishDate;
 
     @Column(name="number_of_seats")
-    @NotNull
+    @Min(value =1, message = "Number of seats cannot be null")
     @Positive(message = "Number of seats cannot be negative")
-    private int numberOfSeats;
+    private Integer numberOfSeats;
 
 
     @JsonIgnore
@@ -55,7 +52,7 @@ public class Flight {
     private int amountOfPassengers;
 
     @Column(name="ticket_price")
-    @NotNull
+    @Min(value =1, message = "Ticket price cannot be null")
     @Positive(message = "Ticket price cannot be negative")
     private double ticketPrice;
 
