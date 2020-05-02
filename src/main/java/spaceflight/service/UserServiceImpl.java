@@ -40,4 +40,15 @@ public class UserServiceImpl implements UserService {
     public void deleteUserById(Integer id) {
         userRepository.deleteById(id);
     }
+
+    @Override
+    public User updateUser(User user) {
+
+        User tmpUser = userRepository.findUserById(user.getId());
+        tmpUser.setUsername(user.getUsername());
+        tmpUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        tmpUser.setRole(user.getRole());
+
+        return userRepository.save(tmpUser);
+    }
 }
