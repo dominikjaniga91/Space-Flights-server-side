@@ -4,16 +4,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -65,7 +62,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<CustomErrorMessage> getConstraintViolationExceptionHandler(ConstraintViolationException ex, WebRequest request){
+    public ResponseEntity<CustomErrorMessage> getConstraintViolationExceptionHandler(ConstraintViolationException ex){
         var violations =  ex.getConstraintViolations();
         var message = violations.stream()
                                 .map(ConstraintViolation::getMessageTemplate)

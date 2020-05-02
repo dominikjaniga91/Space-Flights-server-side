@@ -20,11 +20,11 @@ public class Passenger {
     private Integer id;
 
     @Column(name="first_name")
-    @NotBlank(message = "First name cannot be empty")
+    @NotBlank(message = "Please provide first name")
     private String firstName;
 
     @Column(name="last_name")
-    @NotBlank(message = "Last name cannot be empty")
+    @NotBlank(message = "Please provide last name")
     private String lastName;
 
     @Column(name="sex")
@@ -32,7 +32,7 @@ public class Passenger {
     private String sex;
 
     @Column(name="country")
-    @NotBlank(message = "Country cannot be empty")
+    @NotBlank(message = "Please provide country")
     private String country;
 
     @Column(name="notes")

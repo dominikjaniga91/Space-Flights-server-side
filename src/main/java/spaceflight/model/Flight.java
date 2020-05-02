@@ -13,7 +13,7 @@ import java.util.*;
 
 @Entity
 @Table(name="flights")
-@StartFinishDate
+@StartFinishDate(message = "Arrival date cannot be earlier than departure" )
 public class Flight {
 
     @Id
@@ -21,7 +21,7 @@ public class Flight {
     private Integer id;
 
     @Column(name="destination")
-    @NotBlank(message = "Destination cannot be empty")
+    @NotBlank(message = "Please provide travel destination")
     private String destination;
 
     @Column(name="start_date")
