@@ -1,5 +1,6 @@
 package spaceflight.exception;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,8 +39,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errors, HttpStatus.NOT_FOUND);
     }
 
-
-
     @ExceptionHandler(FlightNotFoundException.class)
     public ResponseEntity<CustomErrorMessage> getFlightNotFoundExceptionHandler(FlightNotFoundException ex){
 
@@ -72,6 +71,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         var errors = getCustomErrorMessage(HttpStatus.BAD_REQUEST, message, violations.toString());
                return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
 
+    }
+
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity<CustomErrorMessage> getExpiredJwtExceptionHandler(ExpiredJwtException ex){
+
+        var errors = getCustomErrorMessage(HttpStatus.BAD_REQUEST, ex.getMessage(), ex.getClass().toString());
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
 }
