@@ -1,4 +1,4 @@
-package spaceflight.authentication.model;
+package spaceflight.model;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
