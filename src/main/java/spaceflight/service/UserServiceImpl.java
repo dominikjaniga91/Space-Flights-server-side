@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import spaceflight.model.User;
 import spaceflight.repository.UserRepositoryImpl;
 
+import java.util.List;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -18,5 +20,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public User saveUser(User user) {
         return userRepository.save(user);
+    }
+
+    @Override
+    public List<User> findAll() {
+        return userRepository.findAll();
     }
 }
