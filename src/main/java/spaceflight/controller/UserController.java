@@ -35,4 +35,10 @@ public class UserController {
         return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
     }
 
+    @PutMapping("/user/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteUserById(@PathVariable Integer id){
+        userService.deleteUserById(id);
+    }
+
 }
