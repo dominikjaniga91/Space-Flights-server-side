@@ -11,4 +11,6 @@ public interface UserRepositoryImpl extends JpaRepository<User, Integer> {
 
    User findUserById(Integer id);
 
+   void deleteUserByUsername(String username);
+
 }

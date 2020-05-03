@@ -30,15 +30,15 @@ public class UserController {
         return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
     }
 
-    @GetMapping("/user/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Integer id){
-        return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
+    @GetMapping("/user/{username}")
+    public ResponseEntity<User> getUserById(@PathVariable String username){
+        return new ResponseEntity<>(userService.getUserByUsername(username), HttpStatus.OK);
     }
 
-    @DeleteMapping("/user/{id}")
+    @DeleteMapping("/user/{username}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteUserById(@PathVariable Integer id){
-        userService.deleteUserById(id);
+    public void deleteUserById(@PathVariable String username){
+        userService.deleteUserByUsername(username);
     }
 
     @PutMapping("/user")
