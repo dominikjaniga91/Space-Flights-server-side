@@ -38,10 +38,10 @@ public class FlightServiceImplTest {
         Passenger passenger = new Passenger("Dominik", "Janiga", Sex.MALE.toString(), "Poland", null, LocalDate.of(1990, 11, 11));
         passengerService.savePassenger(passenger);
 
-        List<Flight> flights = Stream.of(new Flight("Moon", LocalDate.of(2020,3,25), LocalDate.of(2020,4,25), 15, 15000.0),
-                new Flight("Jupiter", LocalDate.of(2020,3,25), LocalDate.of(2020,6,25), 15, 30000.0),
-                new Flight("Mars", LocalDate.of(2020,3,25), LocalDate.of(2020,4,25), 15, 20000.0),
-                new Flight("Jupiter", LocalDate.of(2020,3,25), LocalDate.of(2020,4,25), 15, 30000.0)).collect(Collectors.toList());
+        List<Flight> flights = Stream.of(new Flight("Moon", LocalDate.of(2020,10,25), LocalDate.of(2020,11,25), 15, 15000.0),
+                new Flight("Jupiter", LocalDate.of(2020,10,25), LocalDate.of(2020,11,25), 15, 30000.0),
+                new Flight("Mars", LocalDate.of(2020,10,25), LocalDate.of(2020,11,25), 15, 20000.0),
+                new Flight("Jupiter", LocalDate.of(2020,10,25), LocalDate.of(2020,11,25), 15, 30000.0)).collect(Collectors.toList());
 
         flights.forEach(flight -> flightService.saveFlight(flight));
     }
@@ -60,7 +60,7 @@ public class FlightServiceImplTest {
     @DisplayName("one more flight after save")
     void shouldReturnFiveFlights_afterSaveFlightToDatabase(){
 
-        Flight flight = new Flight("Neptune", LocalDate.of(2020,3,25), LocalDate.of(2021,4,25), 15, 3_000_000.0);
+        Flight flight = new Flight("Neptune", LocalDate.of(2020,11,25), LocalDate.of(2021,12,25), 15, 3_000_000.0);
         flightService.saveFlight(flight);
         Assertions.assertEquals(5, flightService.findAll().size());
     }

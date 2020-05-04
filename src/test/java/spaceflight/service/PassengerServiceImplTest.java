@@ -34,7 +34,7 @@ public class PassengerServiceImplTest {
 
     @BeforeAll
     void setUpData() {
-        Flight flight = new Flight("Jupiter", LocalDate.of(2020, 3, 25), LocalDate.of(2020, 6, 25), 15, 30000.0);
+        Flight flight = new Flight("Jupiter", LocalDate.of(2020, 11, 25), LocalDate.of(2020, 12, 25), 15, 30000.0);
         flightService.saveFlight(flight);
 
         List<Passenger> passengers = Stream.of(
