@@ -77,14 +77,12 @@ public class ValidationTest {
         Passenger lastNameNull = new Passenger("Dominik", null, Sex.MALE.toString(), "Poland", null, LocalDate.of(1990, 11, 11));
         Passenger sexNull = new Passenger("Dominik", "Janiga", null, "Poland", null, LocalDate.of(1990, 11, 11));
         Passenger countryNull = new Passenger("Dominik", "Janiga", Sex.MALE.toString(), null, null, LocalDate.of(1990, 11, 11));
-        Passenger birthDateNull = new Passenger("Dominik", "Janiga", Sex.MALE.toString(), "Poland", null, null);
 
         return Stream.of(
                 Arguments.arguments(firstNameNull, "first name") ,
                 Arguments.arguments(lastNameNull, "last name") ,
                 Arguments.arguments(sexNull, "sex") ,
-                Arguments.arguments(countryNull, "country"),
-                Arguments.arguments(birthDateNull, "birth date"));
+                Arguments.arguments(countryNull, "country"));
     }
 
 
