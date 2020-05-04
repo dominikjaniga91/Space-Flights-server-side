@@ -1,15 +1,17 @@
 package spaceflight.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.TestInstance;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.test.context.support.WithMockUser;
+import spaceflight.authentication.AuthenticationService;
+import spaceflight.authentication.UserDetailServiceImpl;
 import spaceflight.model.Flight;
 import spaceflight.service.FlightServiceImpl;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+
+import javax.servlet.http.HttpServletResponse;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -25,6 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.hamcrest.Matchers.*;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -32,7 +38,7 @@ import java.util.stream.Stream;
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(FlightController.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@WithMockUser(username = "Dominik", roles = {"ADMIN"})
+@WithMockUser(username = "admin", password = "admin", roles = {"ADMIN"})
 @DisplayName("Request to flight controller using http method")
 public class FlightControllerTest {
 
@@ -42,7 +48,11 @@ public class FlightControllerTest {
     @MockBean
     private FlightServiceImpl flightService;
 
+    @MockBean
+    private UserDetailServiceImpl userDetailService;
+
     private List<Flight> flights;
+    private String token;
 
     @BeforeAll
     void setUp() {
@@ -51,17 +61,24 @@ public class FlightControllerTest {
                             new Flight(2,"Jupiter", LocalDate.of(2020,3,25), LocalDate.of(2020,3,25), 15, 30000.0),
                             new Flight(3,"Mars", LocalDate.of(2020,3,25), LocalDate.of(2020,3,25), 15, 20000.0),
                             new Flight(4,"Jupiter", LocalDate.of(2020,3,25), LocalDate.of(2020,4,25), 15, 30000.0)).collect(Collectors.toList());
+        token = Jwts.builder().setSubject("admin")
+                .claim("role", "ADMIN")
+                .setExpiration(new Date(System.currentTimeMillis() + 86_400_000))
+                .signWith(SignatureAlgorithm.HS512, "SecretKey")
+                .compact();
 
     }
 
     @Test
-    @DisplayName("get should return status ok and right amount of flights")
+    @DisplayName("GET should return status ok and right amount of flights")
     void shouldReturnSizeOfFlightsList_afterRequestingRightPathToController() throws Exception {
 
         BDDMockito.given(flightService.findAll()).willReturn(flights);
 
         mockMvc.perform(get("/api/flights")
-                .contentType(MediaType.APPLICATION_JSON))
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", token)
+                .header("Access-Control-Expose-Headers", "Authorization"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*", Matchers.hasSize(4)));
 
@@ -70,13 +87,15 @@ public class FlightControllerTest {
     }
 
     @Test
-    @DisplayName("get should return status ok and JSON objects")
+    @DisplayName("GET should return status ok and JSON objects")
     void shouldReturnFlightsListAsJson_afterRequestingRightPathToController() throws Exception {
 
         BDDMockito.given(flightService.findAll()).willReturn(flights);
 
         mockMvc.perform(get("/api/flights")
-                .contentType(MediaType.APPLICATION_JSON))
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", token)
+                .header("Access-Control-Expose-Headers", "Authorization"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].destination", is("Moon")))
                 .andExpect(jsonPath("$[1].destination", is("Jupiter")))
@@ -88,35 +107,40 @@ public class FlightControllerTest {
     }
 
     @Test
-    @DisplayName("get with id parameter should return status ok, JSON object and verify method")
+    @DisplayName("GET with id parameter should return status ok, JSON object and verify method")
     void shouldReturnSpecificFlight_AfterRequestingWithPathVariable() throws Exception {
 
         BDDMockito.given(flightService.getFlightById(anyInt())).willReturn(flights.get(3));
 
-       mockMvc.perform(get("/api/flight/{id}", 1)
-               .contentType(MediaType.APPLICATION_JSON))
-               .andExpect(status().isOk())
-               .andExpect(jsonPath("$.id", Matchers.is(4)))
-               .andExpect(jsonPath("$.destination", is("Jupiter")))
-               .andExpect(jsonPath("$.startDate", is("2020-03-25")))
-               .andExpect(jsonPath("$.finishDate", is("2020-04-25")))
-               .andExpect(jsonPath("$.numberOfSeats", is(15)))
-               .andExpect(jsonPath("$.ticketPrice", is(30000.0)));
+        mockMvc.perform(get("/api/flight/{id}", 1)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", token)
+                .header("Access-Control-Expose-Headers", "Authorization"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", Matchers.is(4)))
+                .andExpect(jsonPath("$.destination", is("Jupiter")))
+                .andExpect(jsonPath("$.startDate", is("2020-03-25")))
+                .andExpect(jsonPath("$.finishDate", is("2020-04-25")))
+                .andExpect(jsonPath("$.numberOfSeats", is(15)))
+                .andExpect(jsonPath("$.ticketPrice", is(30000.0)));
 
         BDDMockito.verify(flightService, Mockito.times(1)).getFlightById(anyInt());
         BDDMockito.verifyNoMoreInteractions(flightService);
 
     }
 
+
     @Test
-    @DisplayName("post should return status created, save JSON object and verify method")
+    @DisplayName("POST should return status created, save JSON object and verify method")
     void shouldReturnFlight_afterRequestForSaveFlight() throws Exception {
         Flight flight = new Flight(5,"Jupiter", LocalDate.of(2020,4,25), LocalDate.of(2020,5,25), 15, 80000.0);
         BDDMockito.given(flightService.saveFlight(any(Flight.class))).willReturn(flight);
 
         mockMvc.perform(post("/api/flight")
                 .content(new ObjectMapper().writeValueAsString(flight))
-                .contentType(MediaType.APPLICATION_JSON))
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", token)
+                .header("Access-Control-Expose-Headers", "Authorization"))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id", is(5)))
@@ -132,12 +156,14 @@ public class FlightControllerTest {
 
 
     @Test
-    @DisplayName("delete with id parameter should return status ok and verify method")
+    @DisplayName("DELETE with id parameter should return status ok and verify method")
     void shouldDeleteFlight_afterRequestingRightPath() throws Exception {
 
         BDDMockito.doNothing().when(flightService).deleteFlightById(1);
 
-        mockMvc.perform(delete("/api/flight/{id}", 1))
+        mockMvc.perform(delete("/api/flight/{id}", 1)
+                .header("Authorization", token)
+                .header("Access-Control-Expose-Headers", "Authorization"))
                 .andDo(print())
                 .andExpect(status().isOk());
 
@@ -145,14 +171,16 @@ public class FlightControllerTest {
     }
 
     @Test
-    @DisplayName("put should return status ok and verify method")
+    @DisplayName("PUT should return status ok and verify method")
     void shouldUpdateFlight_afterRequestingRightPath() throws Exception {
         Flight flight = new Flight(1,"Neptune", LocalDate.of(2020,4,25), LocalDate.of(2021,5,25), 15, 1_000_000.00);
         BDDMockito.given(flightService.updateFlight(any(Flight.class))).willReturn(flight);
 
         mockMvc.perform(put("/api/flight")
                 .content(new ObjectMapper().writeValueAsString(flight))
-                .contentType(MediaType.APPLICATION_JSON))
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", token)
+                .header("Access-Control-Expose-Headers", "Authorization"))
                 .andExpect(status().isOk());
 
         BDDMockito.verify(flightService, Mockito.times(1)).updateFlight(any(Flight.class));
@@ -161,7 +189,7 @@ public class FlightControllerTest {
     }
 
     @Test
-    @DisplayName("post should return bad request after send invalid data")
+    @DisplayName("POST should return bad request after send invalid data")
     void shouldReturnBadRequest_afterSendRequestWithBadData() throws Exception {
 
         String flight = "{\"id\": \"dfwwd\",\n" +
@@ -173,13 +201,15 @@ public class FlightControllerTest {
 
         mockMvc.perform(post("/api/flight")
                 .content(flight)
-                .contentType(MediaType.APPLICATION_JSON))
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", token)
+                .header("Access-Control-Expose-Headers", "Authorization"))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
 
     @Test
-    @DisplayName("put with flight and passenger id should return status ok")
+    @DisplayName("PUT with flight and passenger id should return status ok")
     void shouldReturnStatusOk_afterRequestPutPassengerInFlight() throws Exception {
 
         int[] id = { 1 };
@@ -187,18 +217,22 @@ public class FlightControllerTest {
 
         mockMvc.perform(put("/api/flight/passengers/{flightId}", 1)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(new ObjectMapper().writeValueAsString(id)))
+                .content(new ObjectMapper().writeValueAsString(id))
+                .header("Authorization", token)
+                .header("Access-Control-Expose-Headers", "Authorization"))
                 .andDo(print())
                 .andExpect(status().isOk());
 
     }
 
     @Test
-    @DisplayName("delete with flight and passenger id should return status ok")
+    @DisplayName("DELETE with flight and passenger id should return status ok")
     void shouldReturnStatusOk_afterRequestDeletePassengerFromFlight() throws Exception {
 
         BDDMockito.doNothing().when(flightService).deletePassengerFromFlight(1, 1);
-        mockMvc.perform(delete("/api/flight/passengers/{flightId}/{passengerId}", 1, 1))
+        mockMvc.perform(delete("/api/flight/passengers/{flightId}/{passengerId}", 1, 1)
+                .header("Authorization", token)
+                .header("Access-Control-Expose-Headers", "Authorization"))
                 .andDo(print())
                 .andExpect(status().isOk());
 
