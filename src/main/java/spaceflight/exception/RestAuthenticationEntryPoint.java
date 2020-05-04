@@ -18,9 +18,14 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException, ServletException {
         var error = new CustomErrorMessage();
         error.setStatus(HttpStatus.UNAUTHORIZED.value());
-        error.setDetail("Invalid username or password");
         error.setDeveloperMessage(e.getMessage());
         error.setTimestamp(LocalDateTime.now());
+
+        if(response.getHeader("expired") != null){
+            error.setDetail("Please login again");
+        }else{
+            error.setDetail("Invalid username or password");
+        }
 
         var mapper = new ObjectMapper();
         var errorMessage = mapper.writeValueAsString(error);
@@ -29,6 +34,5 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
         response.setCharacterEncoding("UTF-8");
         response.getOutputStream().print(errorMessage);
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-
     }
 }
