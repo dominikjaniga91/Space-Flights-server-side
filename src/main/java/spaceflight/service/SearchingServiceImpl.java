@@ -27,7 +27,7 @@ public class SearchingServiceImpl {
         System.out.println(searchParams);
 
         List<Flight> flightList;
-        LocalDate startDate = searchParams.containsKey("startDate") ? LocalDate.parse(searchParams.get("finishDate")) : null;
+        LocalDate startDate = searchParams.containsKey("startDate") ? LocalDate.parse(searchParams.get("startDate")) : null;
         LocalDate finishDate = searchParams.containsKey("finishDate") ? LocalDate.parse(searchParams.get("finishDate")) : null;
         String destination = searchParams.getOrDefault("destination", null);
 
@@ -50,9 +50,9 @@ public class SearchingServiceImpl {
     public List<Passenger> getFoundedPassengers(HashMap<String, String> searchParams){
 
         List<Passenger> passengerList;
-        LocalDate birthDate = LocalDate.parse(searchParams.get("birthDate"));
-        String firstName = searchParams.get("firstName");
-        String lastName = searchParams.get("lastName");
+        LocalDate birthDate = searchParams.containsKey("birthDate") ? LocalDate.parse(searchParams.get("birthDate")) : null;
+        String firstName = searchParams.getOrDefault("firstName", null);
+        String lastName = searchParams.getOrDefault("lastName", null);
 
         if(birthDate != null && firstName != null && lastName != null){
             passengerList = passengerDao.getPassengersByFirstNameAndLastNameAndBirthDate(firstName, lastName, birthDate);
