@@ -1,6 +1,8 @@
 package spaceflight.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.BDDMockito;
@@ -16,6 +18,10 @@ import spaceflight.model.Passenger;
 import spaceflight.model.Sex;
 import spaceflight.service.PassengerServiceImpl;
 import java.time.LocalDate;
+import java.util.Date;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -23,6 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @AutoConfigureMockMvc
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("Api user with ")
 public class SecurityTest {
 
@@ -33,15 +40,29 @@ public class SecurityTest {
     @MockBean
     private PassengerServiceImpl passengerService;
 
+
+
     @Nested
     @DisplayName("admin role")
-    @WithMockUser(username = "Dominik", roles = {"ADMIN"})
     class Admin {
+
+        String token;
+
+        @BeforeEach
+        void setUp() {
+        token = Jwts.builder().setSubject("admin")
+                    .claim("role", "ADMIN")
+                    .setExpiration(new Date(System.currentTimeMillis() + 86_400_000))
+                    .signWith(SignatureAlgorithm.HS512, "SecretKey")
+                    .compact();
+        }
 
         @Test
         @DisplayName("has access to GET method")
         void shouldAuthenticatedUser_afterGetRequest() throws Exception {
-            mockMvc.perform(get("/api/passengers"))
+            mockMvc.perform(get("/api/passengers")
+                    .header("Authorization", token)
+                    .header("Access-Control-Expose-Headers", "Authorization"))
                     .andExpect(status().isOk());
         }
 
@@ -53,7 +74,9 @@ public class SecurityTest {
 
             mockMvc.perform(post("/api/passenger")
                     .content(new ObjectMapper().writeValueAsString(passenger))
-                    .contentType(MediaType.APPLICATION_JSON))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .header("Authorization", token)
+                    .header("Access-Control-Expose-Headers", "Authorization"))
                     .andExpect(status().isCreated());
         }
 
@@ -62,7 +85,9 @@ public class SecurityTest {
         void shouldAuthenticatedUser_afterDeleteRequest() throws Exception {
             BDDMockito.doNothing().when(passengerService).deletePassengerById(1);
 
-            mockMvc.perform(delete("/api/passenger/{passengerId}", 1))
+            mockMvc.perform(delete("/api/passenger/{passengerId}", 1)
+                    .header("Authorization", token)
+                    .header("Access-Control-Expose-Headers", "Authorization"))
                     .andExpect(status().isOk());
         }
 
@@ -74,7 +99,9 @@ public class SecurityTest {
 
             mockMvc.perform(put("/api/passenger")
                     .content(new ObjectMapper().writeValueAsString(passenger))
-                    .contentType(MediaType.APPLICATION_JSON))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .header("Authorization", token)
+                    .header("Access-Control-Expose-Headers", "Authorization"))
                     .andExpect(status().isOk());
         }
 
@@ -82,13 +109,25 @@ public class SecurityTest {
 
     @Nested
     @DisplayName("manager or employee role")
-    @WithMockUser(username = "Darek", roles = {"MANAGER", "EMPLOYEE"})
     class Manager {
+
+        String token;
+
+        @BeforeEach
+        void setUp() {
+            token = Jwts.builder().setSubject("darek")
+                    .claim("role", "EMPLOYEE")
+                    .setExpiration(new Date(System.currentTimeMillis() + 86_400_000))
+                    .signWith(SignatureAlgorithm.HS512, "SecretKey")
+                    .compact();
+        }
 
         @Test
         @DisplayName("has access to GET method")
         void shouldAuthenticatedUser_afterGetRequest() throws Exception {
-            mockMvc.perform(get("/api/passengers"))
+            mockMvc.perform(get("/api/passengers")
+                    .header("Authorization", token)
+                    .header("Access-Control-Expose-Headers", "Authorization"))
                     .andExpect(status().isOk());
         }
 
@@ -100,7 +139,9 @@ public class SecurityTest {
 
             mockMvc.perform(post("/api/passenger")
                     .content(new ObjectMapper().writeValueAsString(passenger))
-                    .contentType(MediaType.APPLICATION_JSON))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .header("Authorization", token)
+                    .header("Access-Control-Expose-Headers", "Authorization"))
                     .andExpect(status().isCreated());
         }
 
@@ -109,7 +150,9 @@ public class SecurityTest {
         void shouldAuthenticatedUser_afterDeleteRequest() throws Exception {
             BDDMockito.doNothing().when(passengerService).deletePassengerById(1);
 
-            mockMvc.perform(delete("/api/passenger/{passengerId}", 1))
+            mockMvc.perform(delete("/api/passenger/{passengerId}", 1)
+                    .header("Authorization", token)
+                    .header("Access-Control-Expose-Headers", "Authorization"))
                     .andExpect(status().isForbidden());
         }
 
@@ -121,7 +164,9 @@ public class SecurityTest {
 
             mockMvc.perform(put("/api/passenger")
                     .content(new ObjectMapper().writeValueAsString(passenger))
-                    .contentType(MediaType.APPLICATION_JSON))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .header("Authorization", token)
+                    .header("Access-Control-Expose-Headers", "Authorization"))
                     .andExpect(status().isOk());
         }
     }
