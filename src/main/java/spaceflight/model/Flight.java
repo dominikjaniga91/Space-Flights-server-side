@@ -20,7 +20,6 @@ public class Flight {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name="destination")
     @NotBlank(message = "Please provide travel destination")
     private String destination;
 

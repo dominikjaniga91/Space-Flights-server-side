@@ -27,15 +27,12 @@ public class Passenger {
     @NotBlank(message = "Please provide last name")
     private String lastName;
 
-    @Column(name="sex")
     @NotNull
     private String sex;
 
-    @Column(name="country")
     @NotBlank(message = "Please provide country")
     private String country;
 
-    @Column(name="notes")
     private String notes;
 
     @Column(name="birth_date")

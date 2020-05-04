@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -19,13 +20,18 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @NotBlank(message = "Please provide username")
     private String username;
 
     /**
      * Do not use @JsonIgnore. This annotation block UserDetailService
      */
+    @NotBlank(message = "Please provide password")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
+
+    @NotBlank(message = "Please provide user role")
     private String role;
 
     public User() {
