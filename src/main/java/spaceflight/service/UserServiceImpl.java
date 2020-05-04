@@ -46,7 +46,11 @@ public class UserServiceImpl implements UserService {
 
         User tmpUser = userRepository.findUserById(user.getId());
         tmpUser.setUsername(user.getUsername());
-        tmpUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        String userPassword = user.getPassword();
+        if(userPassword != null){
+            String encodedPassword = passwordEncoder.encode(userPassword);
+            tmpUser.setPassword(encodedPassword);
+        }
         tmpUser.setRole(user.getRole());
 
         return userRepository.save(tmpUser);
