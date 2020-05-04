@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import spaceflight.model.Passenger;
@@ -19,9 +20,6 @@ import spaceflight.model.Sex;
 import spaceflight.service.PassengerServiceImpl;
 import java.time.LocalDate;
 import java.util.Date;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -31,6 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("Api user with ")
+@ActiveProfiles("test")
 public class SecurityTest {
 
 
@@ -41,9 +40,9 @@ public class SecurityTest {
     private PassengerServiceImpl passengerService;
 
 
-
     @Nested
     @DisplayName("admin role")
+    @WithMockUser(username = "admin", password = "admin", roles = {"ADMIN"})
     class Admin {
 
         String token;
@@ -109,6 +108,7 @@ public class SecurityTest {
 
     @Nested
     @DisplayName("manager or employee role")
+    @WithMockUser(username = "darek", password = "darek123", roles = {"EMPLOYEE"})
     class Manager {
 
         String token;
