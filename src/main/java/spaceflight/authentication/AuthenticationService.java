@@ -26,7 +26,7 @@ public class AuthenticationService {
                 .signWith(SignatureAlgorithm.HS512, SIGNING_KEY)
                 .compact();
 
-        response.addHeader("Authorization", PREFIX + " " + JwtToken);
+        response.addHeader("Authorization", PREFIX + JwtToken);
         response.addHeader("Access-Control-Expose-Headers", "Authorization");
 
     }
@@ -37,6 +37,7 @@ public class AuthenticationService {
         String token = request.getHeader("Authorization");
 
         if( token != null){
+
             Claims claims  = Jwts.parser()
                     .setSigningKey(SIGNING_KEY)
                     .parseClaimsJws(token.replace(PREFIX, ""))
