@@ -7,7 +7,7 @@ Entities are linked each other with many to many relation.
 
 ### Database architecture:
 
-![image](src/main/resources/static/Selection_003.png)
+![image](src/main/resources/static/Selection_004.png)
 
 ### Application has several functionalities:
 * create new fligth
