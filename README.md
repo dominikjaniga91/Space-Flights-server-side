@@ -7,7 +7,7 @@ Entities are linked each other with many to many relation.
 
 ### Database architecture:
 
-![image](https://github.com/dominikjaniga91/Space-Flights-server-side/blob/2fauthentication/Selection_003.png)
+![image](src/main/resources/static/Selection_003.png)
 
 ### Application has several functionalities:
 * create new fligth
