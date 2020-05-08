@@ -4,8 +4,8 @@ https://myspacetrip.herokuapp.com/login
 
 ## Description
 
-The application has been created to manage space travel. There is two entity: FLight and Passenger.
-Entities are linked each other with many to many relation.
+The application has been created to manage space travel. There are three entitie: Flight, Passenger and User.
+Entities Flight and Passenger are linked each other with many to many relationship.
 
 ### Database architecture:
 
@@ -31,11 +31,13 @@ The user password is encrypted using the BCryptPasswordEncoder.
 * delete passenger from specific flight
 * display list of flights or passengers
 * searching for flight
+* Add and update user - app does not send current password in request response.
 
 ### Applied technologies:
 #### Backend:
 * Java
 * Spring boot
+* Spring security + JWT
 * MySQL
 * Hibernate
 * Maven
@@ -46,6 +48,4 @@ The user password is encrypted using the BCryptPasswordEncoder.
 * Bootstrap
 
 ### To do:
-* add searching method for passenger
-* add spring security integration with react
-* add client panel for flight reservation
+* add two factor authentication with phone number
