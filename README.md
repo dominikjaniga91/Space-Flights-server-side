@@ -49,3 +49,4 @@ The user password is encrypted using the BCryptPasswordEncoder.
 
 ### To do:
 * add two factor authentication with phone number
+* add functionality to save data to excel or pdf file
