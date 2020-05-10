@@ -24,6 +24,14 @@ public class SaveExcelService {
 
         XSSFWorkbook spreadsheet = createNewXlsxFile("Users");
         XSSFSheet sheet = spreadsheet.getSheetAt(0);
+
+        Row firstRow = sheet.createRow(0);
+        int headerCellNumber = 0;
+        for (String key : elements.get(0).keySet()  ) {
+            Cell cell = firstRow.createCell(headerCellNumber++);
+            cell.setCellValue(key);
+        }
+
         int rowNumber = sheet.getLastRowNum() + 1;
         for (Map<String, Object> element : elements) {
 
