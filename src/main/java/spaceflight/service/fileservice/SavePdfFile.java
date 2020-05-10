@@ -5,6 +5,7 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.DocumentException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +18,19 @@ public class SavePdfFile {
         try{
             document.open();
             PdfPTable table = new PdfPTable(numberOfColumns);
+
+            //create header
+            int[] columnsWidth = new int[numberOfColumns];
+            List<Integer> numbersOfChars = new ArrayList<>();
+            elements.get(0).keySet().forEach(key -> numbersOfChars.add(key.length()));
+
+            for (int i=0; i<columnsWidth.length ; i++) {
+                columnsWidth[i] = numbersOfChars.get(i);
+            }
+
+            table.setWidths(columnsWidth);
+            table.setWidthPercentage(100);
+
 
             document.add(table);
             document.close();
