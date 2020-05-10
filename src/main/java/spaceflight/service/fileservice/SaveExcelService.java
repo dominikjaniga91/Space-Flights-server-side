@@ -26,7 +26,22 @@ public class SaveExcelService {
         XSSFSheet sheet = spreadsheet.getSheetAt(0);
 
         setUpSheetHeaders(elements, sheet);
+        saveDataIntoRows(elements, sheet);
 
+
+        return spreadsheet;
+    }
+
+    private void setUpSheetHeaders(List<? extends Map<String,Object>> elements, XSSFSheet sheet) {
+        Row firstRow = sheet.createRow(0);
+        int headerCellNumber = 0;
+        for (String key : elements.get(0).keySet()  ) {
+            Cell cell = firstRow.createCell(headerCellNumber++);
+            cell.setCellValue(key);
+        }
+    }
+
+    private void saveDataIntoRows(List<? extends Map<String,Object>> elements, XSSFSheet sheet){
         int rowNumber = sheet.getLastRowNum() + 1;
         for (Map<String, Object> element : elements) {
 
@@ -50,16 +65,6 @@ public class SaveExcelService {
                     cell.setCellValue((Boolean) obj);
                 }
             }
-        }
-        return spreadsheet;
-    }
-
-    private void setUpSheetHeaders(List<? extends Map<String,Object>> elements, XSSFSheet sheet) {
-        Row firstRow = sheet.createRow(0);
-        int headerCellNumber = 0;
-        for (String key : elements.get(0).keySet()  ) {
-            Cell cell = firstRow.createCell(headerCellNumber++);
-            cell.setCellValue(key);
         }
     }
 }
