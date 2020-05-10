@@ -51,20 +51,26 @@ public class SaveExcelService {
 
                 Cell cell = row.createCell(cellNumber++);
                 Object obj = object.getValue();
-                if (obj instanceof Integer) {
-                    cell.setCellValue((Integer) obj);
-                } else if (obj instanceof String) {
-                    cell.setCellValue((String) obj);
-                } else if (obj instanceof Long) {
-                    cell.setCellValue((Long) obj);
-                } else if (obj instanceof Double) {
-                    cell.setCellValue((Double) obj);
-                } else if (obj instanceof Date) {
-                    cell.setCellValue((Date) obj);
-                } else if (obj instanceof Boolean) {
-                    cell.setCellValue((Boolean) obj);
-                }
+                setValueToCell(cell, obj);
             }
+        }
+    }
+
+    private void setValueToCell(Cell cell, Object obj) {
+        if (obj instanceof Integer) {
+            cell.setCellValue((Integer) obj);
+        } else if (obj instanceof String) {
+            cell.setCellValue((String) obj);
+        } else if (obj instanceof Long) {
+            cell.setCellValue((Long) obj);
+        } else if (obj instanceof Double) {
+            cell.setCellValue((Double) obj);
+        } else if (obj instanceof Date) {
+            cell.setCellValue((Date) obj);
+        } else if (obj instanceof Boolean) {
+            cell.setCellValue((Boolean) obj);
+        }else if (obj == null){
+            cell.setCellValue(" ");
         }
     }
 }
