@@ -20,7 +20,7 @@ public class SaveExcelService {
         return  spreadsheet;
     }
 
-    public XSSFWorkbook saveDataToFile(List<Map<String, Object>> elements) {
+    public XSSFWorkbook saveDataToFile(List<? extends Map<String, Object>> elements) {
 
         XSSFWorkbook spreadsheet = createNewXlsxFile("Users");
         XSSFSheet sheet = spreadsheet.getSheetAt(0);
