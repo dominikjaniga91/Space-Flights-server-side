@@ -12,7 +12,7 @@ import java.util.Map;
 
 @Service
 public class SavePdfFile {
-    Font cellFont = FontFactory.getFont(FontFactory.HELVETICA, 9, BaseColor.BLACK);
+
     Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10, BaseColor.WHITE);
 
     public Document saveDateToPdfFile(List<? extends Map<String,Object>> elements, Document document){
@@ -40,18 +40,7 @@ public class SavePdfFile {
                 table.addCell(header);
 
             });
-
-            for (Map<String, Object> element : elements) {
-
-                for(Object object : element.values()){
-                    String value = object != null ? object.toString() : " ";
-                    Paragraph paragraph = new Paragraph(value, cellFont);
-                    PdfPCell row = new PdfPCell(paragraph);
-                    row.setHorizontalAlignment(Element.ALIGN_CENTER);
-                    row.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                    table.addCell(row);
-                }
-            }
+            saveDataToTable(elements, table);
             document.add(table);
             document.close();
 
@@ -77,5 +66,20 @@ public class SavePdfFile {
         return columnsWidth;
     }
 
+    private void saveDataToTable(List<? extends Map<String,Object>> elements, PdfPTable table){
 
+        Font cellFont = FontFactory.getFont(FontFactory.HELVETICA, 9, BaseColor.BLACK);
+
+        for (Map<String, Object> element : elements) {
+
+            for(Object object : element.values()){
+                String value = object != null ? object.toString() : " ";
+                Paragraph paragraph = new Paragraph(value, cellFont);
+                PdfPCell row = new PdfPCell(paragraph);
+                row.setHorizontalAlignment(Element.ALIGN_CENTER);
+                row.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                table.addCell(row);
+            }
+        }
+    }
 }
