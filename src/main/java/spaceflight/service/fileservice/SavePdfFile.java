@@ -22,33 +22,17 @@ public class SavePdfFile {
             document.open();
             PdfPTable table = new PdfPTable(numberOfColumns);
 
-            //create header
             int[] columnsWidth = setUpTableColumnWidth(elements, numberOfColumns);
-
             table.setWidths(columnsWidth);
             table.setWidthPercentage(100);
 
-            elements.get(0).keySet().forEach(key -> {
-
-                Paragraph paragraph = new Paragraph(key.toUpperCase(), headerFont);
-                PdfPCell header = new PdfPCell(paragraph);
-                header.setHorizontalAlignment(Element.ALIGN_CENTER);
-                header.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                header.setPaddingTop(5);
-                header.setPaddingBottom(5);
-                header.setBackgroundColor(new CMYKColor(0.644f, 0.413f, 0f, 0.525f));
-                table.addCell(header);
-
-            });
+            createTableHeader(elements, table);
             saveDataToTable(elements, table);
             document.add(table);
             document.close();
-
-
         }catch (DocumentException ex){
             System.out.println(ex.getMessage());
         }
-
         return document;
     }
 
@@ -64,6 +48,24 @@ public class SavePdfFile {
             columnsWidth[i] = numbersOfChars.get(i);
         }
         return columnsWidth;
+    }
+
+    private void createTableHeader(List<? extends Map<String,Object>> elements, PdfPTable table) {
+
+        Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10, BaseColor.WHITE);
+
+        elements.get(0).keySet().forEach(key -> {
+
+            Paragraph paragraph = new Paragraph(key.toUpperCase(), headerFont);
+            PdfPCell header = new PdfPCell(paragraph);
+            header.setHorizontalAlignment(Element.ALIGN_CENTER);
+            header.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            header.setPaddingTop(5);
+            header.setPaddingBottom(5);
+            header.setBackgroundColor(new CMYKColor(0.644f, 0.413f, 0f, 0.525f));
+            table.addCell(header);
+
+        });
     }
 
     private void saveDataToTable(List<? extends Map<String,Object>> elements, PdfPTable table){
