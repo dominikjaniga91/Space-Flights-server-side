@@ -4,6 +4,8 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.CMYKColor;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,7 +15,7 @@ import java.util.Map;
 @Service
 public class SavePdfFile {
 
-    Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10, BaseColor.WHITE);
+    private final Logger logger = LoggerFactory.getLogger(SavePdfFile.class);
 
     public Document saveDateToPdfFile(List<? extends Map<String,Object>> elements, Document document){
 
@@ -31,7 +33,7 @@ public class SavePdfFile {
             document.add(table);
             document.close();
         }catch (DocumentException ex){
-            System.out.println(ex.getMessage());
+           logger.error(ex.getMessage());
         }
         return document;
     }

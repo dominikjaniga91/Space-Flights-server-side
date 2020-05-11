@@ -1,6 +1,8 @@
 package spaceflight.controller;
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +18,7 @@ import java.util.List;
 public class FileController {
 
     private SaveExcelService excelService;
+    private Logger logger = LoggerFactory.getLogger(FileController.class);
 
     @Autowired
     public FileController(SaveExcelService excelService) {
@@ -32,7 +35,7 @@ public class FileController {
             spreadSheet.write(outStream);
             outStream.flush();
         }catch (IOException ex){
-            System.out.println(ex.getMessage());
+            logger.error(ex.getMessage());
         }
 
     }
