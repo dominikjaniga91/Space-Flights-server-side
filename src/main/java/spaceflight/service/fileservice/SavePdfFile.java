@@ -21,13 +21,7 @@ public class SavePdfFile {
             PdfPTable table = new PdfPTable(numberOfColumns);
 
             //create header
-            int[] columnsWidth = new int[numberOfColumns];
-            List<Integer> numbersOfChars = new ArrayList<>();
-            elements.get(0).keySet().forEach(key -> numbersOfChars.add(key.length()));
-
-            for (int i=0; i<columnsWidth.length ; i++) {
-                columnsWidth[i] = numbersOfChars.get(i);
-            }
+            int[] columnsWidth = setUpTableColumnWidth(elements, numberOfColumns);
 
             table.setWidths(columnsWidth);
             table.setWidthPercentage(100);
@@ -52,6 +46,20 @@ public class SavePdfFile {
         }
 
         return document;
+    }
+
+
+    private int[] setUpTableColumnWidth(List<? extends Map<String,Object>> elements,
+                                        int numberOfColumns){
+
+        int[] columnsWidth = new int[numberOfColumns];
+        List<Integer> numbersOfChars = new ArrayList<>();
+        elements.get(0).keySet().forEach(key -> numbersOfChars.add(key.length()));
+
+        for (int i=0; i<columnsWidth.length ; i++) {
+            columnsWidth[i] = numbersOfChars.get(i);
+        }
+        return columnsWidth;
     }
 
 
