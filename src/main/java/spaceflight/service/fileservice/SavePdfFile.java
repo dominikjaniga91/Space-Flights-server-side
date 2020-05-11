@@ -22,20 +22,27 @@ public class SavePdfFile {
         int numberOfColumns = elements.get(0).size();
         try{
             document.open();
-            PdfPTable table = new PdfPTable(numberOfColumns);
-
-            int[] columnsWidth = setUpTableColumnWidth(elements, numberOfColumns);
-            table.setWidths(columnsWidth);
-            table.setWidthPercentage(100);
-
+            PdfPTable table = createPdfTable(elements, numberOfColumns);
             createTableHeader(elements, table);
             saveDataToTable(elements, table);
             document.add(table);
-            document.close();
+
         }catch (DocumentException ex){
            logger.error(ex.getMessage());
+        }finally {
+            document.close();
         }
         return document;
+    }
+
+    private PdfPTable createPdfTable(List<? extends Map<String, Object>> elements, int numberOfColumns) throws DocumentException {
+
+        PdfPTable table = new PdfPTable(numberOfColumns);
+        int[] columnsWidth = setUpTableColumnWidth(elements, numberOfColumns);
+        table.setWidths(columnsWidth);
+        table.setWidthPercentage(100);
+
+        return table;
     }
 
 
@@ -55,9 +62,7 @@ public class SavePdfFile {
     private void createTableHeader(List<? extends Map<String,Object>> elements, PdfPTable table) {
 
         Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10, BaseColor.WHITE);
-
         elements.get(0).keySet().forEach(key -> {
-
             Paragraph paragraph = new Paragraph(key.toUpperCase(), headerFont);
             PdfPCell header = new PdfPCell(paragraph);
             header.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -73,9 +78,7 @@ public class SavePdfFile {
     private void saveDataToTable(List<? extends Map<String,Object>> elements, PdfPTable table){
 
         Font cellFont = FontFactory.getFont(FontFactory.HELVETICA, 9, BaseColor.BLACK);
-
         for (Map<String, Object> element : elements) {
-
             for(Object object : element.values()){
                 String value = object != null ? object.toString() : " ";
                 Paragraph paragraph = new Paragraph(value, cellFont);
