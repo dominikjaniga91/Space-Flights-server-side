@@ -1,4 +1,4 @@
-package spaceflight.service;
+package spaceflight.service.implementation;
 
 import spaceflight.exception.FlightNotFoundException;
 import spaceflight.exception.PassengerNotFoundException;
@@ -8,11 +8,12 @@ import spaceflight.repository.FlightRepositoryImpl;
 import spaceflight.repository.PassengerRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import spaceflight.service.FlightService;
 
 import java.util.List;
 
 @Service
-public class FlightServiceImpl implements FlightService{
+public class FlightServiceImpl implements FlightService {
 
     private FlightRepositoryImpl flightDao;
     private PassengerRepositoryImpl passengerDao;

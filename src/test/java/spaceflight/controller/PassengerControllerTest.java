@@ -21,7 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import spaceflight.authentication.UserDetailServiceImpl;
 import spaceflight.model.Passenger;
 import spaceflight.model.Sex;
-import spaceflight.service.PassengerServiceImpl;
+import spaceflight.service.implementation.PassengerServiceImpl;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;

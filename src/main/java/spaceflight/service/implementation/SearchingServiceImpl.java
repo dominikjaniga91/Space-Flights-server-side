@@ -1,4 +1,4 @@
-package spaceflight.service;
+package spaceflight.service.implementation;
 
 import spaceflight.exception.InvalidSearchFlightDataException;
 import spaceflight.exception.InvalidSearchPassengerDataException;

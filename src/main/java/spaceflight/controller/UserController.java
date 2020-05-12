@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import spaceflight.model.User;
-import spaceflight.service.UserServiceImpl;
+import spaceflight.service.implementation.UserServiceImpl;
 
 import java.util.List;
 

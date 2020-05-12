@@ -11,6 +11,9 @@ import spaceflight.exception.FlightNotFoundException;
 import spaceflight.model.Flight;
 import spaceflight.model.Passenger;
 import spaceflight.model.Sex;
+import spaceflight.service.implementation.FlightServiceImpl;
+import spaceflight.service.implementation.PassengerServiceImpl;
+
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
