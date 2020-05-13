@@ -105,6 +105,7 @@ public class SaveExcelService {
         cellStyle.setFillForegroundColor(xssfColor);
         cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         cellStyle.setFont(createCustomHeaderFont());
+        setCellBorder(cellStyle);
         return cellStyle;
     }
 
