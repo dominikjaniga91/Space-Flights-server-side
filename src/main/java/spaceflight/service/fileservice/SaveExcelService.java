@@ -54,6 +54,9 @@ public class SaveExcelService {
     }
 
     private void setValueToCell(Cell cell, Object obj) {
+        XSSFCellStyle cellStyle = setNormalCellStyle();
+        cell.setCellStyle(cellStyle);
+
         if (obj instanceof Integer) {
             cell.setCellValue((Integer) obj);
         } else if (obj instanceof String) {
@@ -67,19 +70,25 @@ public class SaveExcelService {
         } else if (obj instanceof Boolean) {
             cell.setCellValue((Boolean) obj);
         }else if (obj instanceof LocalDate){
-            setCellDateFormat(cell);
+            setCellDateFormat(cellStyle);
+            cell.setCellStyle(cellStyle);
             cell.setCellValue((LocalDate) obj);
         }else if (obj == null){
             cell.setCellValue(" ");
         }
     }
 
-    private void setCellDateFormat(Cell cell){
-        CellStyle cellStyle = spreadsheet.createCellStyle();
+    private void setCellDateFormat(CellStyle cellStyle){
         CreationHelper createHelper = spreadsheet.getCreationHelper();
         cellStyle.setDataFormat(
                 createHelper.createDataFormat().getFormat("m/d/yy"));
-        cell.setCellStyle(cellStyle);
+    }
+
+    private XSSFCellStyle setNormalCellStyle(){
+
+        XSSFCellStyle cellStyle = spreadsheet.createCellStyle();
+        cellStyle.setAlignment(HorizontalAlignment.LEFT);
+        return cellStyle;
     }
 
     private XSSFCellStyle setHeaderStyle() {
@@ -89,7 +98,6 @@ public class SaveExcelService {
         cellStyle.setFillForegroundColor(xssfColor);
         cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         cellStyle.setFont(createCustomHeaderFont());
-
         return cellStyle;
     }
 
@@ -98,7 +106,6 @@ public class SaveExcelService {
         xssfFont.setBold(true);
         xssfFont.setFontHeight(9);
         xssfFont.setColor(IndexedColors.WHITE.index);
-
         return xssfFont;
     }
 }
