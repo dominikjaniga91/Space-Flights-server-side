@@ -65,6 +65,8 @@ public class SaveExcelService {
             cell.setCellValue((Date) obj);
         } else if (obj instanceof Boolean) {
             cell.setCellValue((Boolean) obj);
+        }else if (obj instanceof LocalDate){
+            cell.setCellValue((LocalDate) obj);
         }else if (obj == null){
             cell.setCellValue(" ");
         }
