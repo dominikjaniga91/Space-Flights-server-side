@@ -5,7 +5,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
-
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -13,23 +13,19 @@ import java.util.Map;
 @Service
 public class SaveExcelService {
 
-
-    public XSSFWorkbook createNewXlsxFile(String fileName){
-        XSSFWorkbook spreadsheet = new XSSFWorkbook();
-        spreadsheet.createSheet(fileName);
-        return  spreadsheet;
-    }
+    XSSFWorkbook spreadsheet;
 
     public XSSFWorkbook saveDataToFile(List<? extends Map<String, Object>> elements) {
-
-        XSSFWorkbook spreadsheet = createNewXlsxFile("Users");
+        createNewXlsxFile("spaceflights_data");
         XSSFSheet sheet = spreadsheet.getSheetAt(0);
-
         setUpSheetHeaders(elements, sheet);
         saveDataIntoRows(elements, sheet);
-
-
         return spreadsheet;
+    }
+
+    private void createNewXlsxFile(String fileName){
+        spreadsheet = new XSSFWorkbook();
+        spreadsheet.createSheet(fileName);
     }
 
     private void setUpSheetHeaders(List<? extends Map<String,Object>> elements, XSSFSheet sheet) {
