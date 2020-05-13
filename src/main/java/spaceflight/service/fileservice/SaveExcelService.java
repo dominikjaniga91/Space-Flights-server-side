@@ -1,11 +1,8 @@
 package spaceflight.service.fileservice;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.CreationHelper;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.*;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.Date;
@@ -36,6 +33,7 @@ public class SaveExcelService {
         int headerCellNumber = 0;
         for (String key : elements.get(0).keySet()  ) {
             Cell cell = firstRow.createCell(headerCellNumber++);
+            cell.setCellStyle(setHeaderStyle());
             cell.setCellValue(key);
         }
     }
@@ -82,5 +80,15 @@ public class SaveExcelService {
         cellStyle.setDataFormat(
                 createHelper.createDataFormat().getFormat("m/d/yy"));
         cell.setCellStyle(cellStyle);
+    }
+
+    private XSSFCellStyle setHeaderStyle() {
+        XSSFCellStyle cellStyle = spreadsheet.createCellStyle();
+        byte[] color = {0, 51, 102};
+        XSSFColor xssfColor = new XSSFColor(color, null);
+        cellStyle.setFillForegroundColor(xssfColor);
+        cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+        return cellStyle;
     }
 }
