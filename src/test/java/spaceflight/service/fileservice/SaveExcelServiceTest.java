@@ -24,14 +24,6 @@ public class SaveExcelServiceTest {
         saveExcelService = new SaveExcelService();
     }
 
-    @Test
-    @DisplayName("Should return spreadSheet name 'users' after create new file")
-    void shouldReturnSpreadSheetName_afterCreateNewXlsxFile(){
-
-        XSSFWorkbook spreadsheet = saveExcelService.createNewXlsxFile("Users");
-        Assertions.assertEquals("Users", spreadsheet.getSheetName(0));
-
-    }
 
     @Test
     @DisplayName("Should return number of rows after save data to xlsx file")
