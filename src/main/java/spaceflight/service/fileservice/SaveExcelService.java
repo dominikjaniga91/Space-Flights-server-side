@@ -87,6 +87,7 @@ public class SaveExcelService {
     private XSSFCellStyle setNormalCellStyle(){
 
         XSSFCellStyle cellStyle = spreadsheet.createCellStyle();
+        setCellBorder(cellStyle);
         cellStyle.setAlignment(HorizontalAlignment.LEFT);
         return cellStyle;
     }
@@ -99,6 +100,14 @@ public class SaveExcelService {
         cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         cellStyle.setFont(createCustomHeaderFont());
         return cellStyle;
+    }
+
+    private void setCellBorder(XSSFCellStyle cellStyle){
+        BorderStyle style = BorderStyle.THIN;
+        cellStyle.setBorderBottom(style);
+        cellStyle.setBorderTop(style);
+        cellStyle.setBorderLeft(style);
+        cellStyle.setBorderRight(style);
     }
 
     private XSSFFont createCustomHeaderFont(){
