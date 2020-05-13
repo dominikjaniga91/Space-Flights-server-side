@@ -62,7 +62,7 @@ public class FlightServiceImpl implements FlightService {
         flights.forEach(flight -> {
 
             Map<String, Object> flightMap = new LinkedHashMap<>();
-
+            flightMap.put("ID", flight.getId());
             flightMap.put("Destination", flight.getDestination());
             flightMap.put("Start date", flight.getStartDate());
             flightMap.put("Finish date", flight.getFinishDate());
