@@ -24,7 +24,7 @@ public class PdfFileController {
     private SavePdfFile pdfService;
     private FlightServiceImpl flightService;
     private PassengerServiceImpl passengerService;
-    private Logger logger = LoggerFactory.getLogger(FileController.class);
+    private Logger logger = LoggerFactory.getLogger(PdfFileController.class);
 
     @Autowired
     public PdfFileController(SavePdfFile pdfService,
