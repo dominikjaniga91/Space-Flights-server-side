@@ -33,9 +33,15 @@ public class SaveExcelService {
         int headerCellNumber = 0;
         for (String key : elements.get(0).keySet()  ) {
             Cell cell = firstRow.createCell(headerCellNumber++);
+            setTableColumnWidth(key, sheet, cell);
             cell.setCellStyle(setHeaderStyle());
             cell.setCellValue(key);
         }
+    }
+
+    private void setTableColumnWidth(String key, XSSFSheet sheet, Cell cell){
+        int columnIndex = cell.getColumnIndex();
+        sheet.setColumnWidth(columnIndex, key.length()*256);
     }
 
     private void saveDataIntoRows(List<? extends Map<String,Object>> elements, XSSFSheet sheet){
