@@ -9,17 +9,23 @@ import spaceflight.repository.PassengerRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import spaceflight.service.PassengerService;
-
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class PassengerServiceImpl implements PassengerService {
 
-    @Autowired
-    PassengerRepositoryImpl passengerDao;
+    private PassengerRepositoryImpl passengerDao;
+    private FlightRepositoryImpl flightDao;
 
     @Autowired
-    FlightRepositoryImpl flightDao;
+    public PassengerServiceImpl(PassengerRepositoryImpl passengerDao,
+                                FlightRepositoryImpl flightDao) {
+        this.passengerDao = passengerDao;
+        this.flightDao = flightDao;
+    }
 
     @Override
     public Passenger updatePassenger(Passenger passenger) {
@@ -40,6 +46,30 @@ public class PassengerServiceImpl implements PassengerService {
     @Override
     public List<Passenger> findAll(){
         return passengerDao.findAll();
+    }
+
+    @Override
+    public List<Map<String, Object>> getPassengersAsListOfMaps(){
+
+        List<Passenger> passengers = passengerDao.findAll();
+
+        List<Map<String, Object>> listOfPassengers = new ArrayList<>();
+
+        passengers.forEach(passenger -> {
+
+            Map<String, Object> passengerMap = new LinkedHashMap<>();
+            passengerMap.put("ID", passenger.getId());
+            passengerMap.put("First name", passenger.getFirstName());
+            passengerMap.put("last name", passenger.getLastName());
+            passengerMap.put("Sex", passenger.getSex());
+            passengerMap.put("Country", passenger.getCountry());
+            passengerMap.put("Notes", passenger.getNotes());
+            passengerMap.put("Birth date", passenger.getBirthDate());
+
+            listOfPassengers.add(passengerMap);
+        });
+
+        return listOfPassengers;
     }
 
     @Override
