@@ -88,7 +88,17 @@ public class SaveExcelService {
         XSSFColor xssfColor = new XSSFColor(color, null);
         cellStyle.setFillForegroundColor(xssfColor);
         cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        cellStyle.setFont(createCustomHeaderFont());
 
         return cellStyle;
+    }
+
+    private XSSFFont createCustomHeaderFont(){
+        XSSFFont xssfFont = spreadsheet.createFont();
+        xssfFont.setBold(true);
+        xssfFont.setFontHeight(9);
+        xssfFont.setColor(IndexedColors.WHITE.index);
+
+        return xssfFont;
     }
 }
