@@ -10,19 +10,21 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import spaceflight.service.implementation.SaveExcelServiceImpl;
+
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 @ActiveProfiles("test")
 @SpringBootTest
-public class SaveExcelServiceTest {
+public class SaveExcelServiceImplTest {
 
-    private SaveExcelService saveExcelService;
+    private SaveExcelServiceImpl saveExcelServiceImpl;
 
     @BeforeEach
     void setUp() {
-        saveExcelService = new SaveExcelService();
+        saveExcelServiceImpl = new SaveExcelServiceImpl();
     }
 
 
@@ -38,7 +40,7 @@ public class SaveExcelServiceTest {
         user2.put("lastName","Kowalski");
 
         List<Map<String, Object>> users = List.of(user1, user2);
-        XSSFWorkbook spreadsheet = saveExcelService.saveDataToFile(users);
+        XSSFWorkbook spreadsheet = saveExcelServiceImpl.saveDataToFile(users);
 
         int rows = spreadsheet.getSheetAt(0).getLastRowNum();
 
@@ -57,7 +59,7 @@ public class SaveExcelServiceTest {
         user2.put("lastName","Kowalski");
 
         List<LinkedHashMap<String, Object>>  users = List.of(user1, user2);
-        XSSFWorkbook spreadsheet = saveExcelService.saveDataToFile(users);
+        XSSFWorkbook spreadsheet = saveExcelServiceImpl.saveDataToFile(users);
 
         XSSFSheet sheet = spreadsheet.getSheetAt(0);
         Row row = sheet.getRow(1);

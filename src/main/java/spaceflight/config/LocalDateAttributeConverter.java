@@ -1,4 +1,4 @@
-package spaceflight.service;
+package spaceflight.config;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;

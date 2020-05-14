@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import spaceflight.service.fileservice.SaveExcelService;
+import spaceflight.service.implementation.SaveExcelServiceImpl;
 import spaceflight.service.implementation.FlightServiceImpl;
 import spaceflight.service.implementation.PassengerServiceImpl;
 
@@ -19,13 +19,13 @@ import java.util.Map;
 @RequestMapping("/api/excel")
 public class ExcelFileController {
 
-    private SaveExcelService excelService;
+    private SaveExcelServiceImpl excelService;
     private FlightServiceImpl flightService;
     private PassengerServiceImpl passengerService;
     private Logger logger = LoggerFactory.getLogger(ExcelFileController.class);
 
     @Autowired
-    public ExcelFileController(SaveExcelService excelService,
+    public ExcelFileController(SaveExcelServiceImpl excelService,
                                FlightServiceImpl flightService,
                                PassengerServiceImpl passengerService) {
         this.excelService = excelService;
