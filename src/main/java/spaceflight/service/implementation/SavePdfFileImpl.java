@@ -1,4 +1,4 @@
-package spaceflight.service.fileservice;
+package spaceflight.service.implementation;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.CMYKColor;
@@ -7,16 +7,17 @@ import com.itextpdf.text.pdf.PdfPTable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
+import spaceflight.service.SavePdfService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 @Service
-public class SavePdfFile {
+public class SavePdfFileImpl implements SavePdfService {
 
-    private final Logger logger = LoggerFactory.getLogger(SavePdfFile.class);
+    private final Logger logger = LoggerFactory.getLogger(SavePdfFileImpl.class);
 
+    @Override
     public Document saveDateToPdfFile(List<? extends Map<String,Object>> elements, Document document){
 
         int numberOfColumns = elements.get(0).size();

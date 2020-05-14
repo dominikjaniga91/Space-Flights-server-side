@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import spaceflight.service.fileservice.SavePdfFile;
+import spaceflight.service.implementation.SavePdfFileImpl;
 import spaceflight.service.implementation.FlightServiceImpl;
 import spaceflight.service.implementation.PassengerServiceImpl;
 import javax.servlet.http.HttpServletResponse;
@@ -21,15 +21,15 @@ import java.util.Map;
 public class PdfFileController {
 
 
-    private SavePdfFile pdfService;
+    private SavePdfFileImpl pdfService;
     private FlightServiceImpl flightService;
     private PassengerServiceImpl passengerService;
     private Logger logger = LoggerFactory.getLogger(PdfFileController.class);
 
     @Autowired
-    public PdfFileController(SavePdfFile pdfService,
-                            FlightServiceImpl flightService,
-                            PassengerServiceImpl passengerService) {
+    public PdfFileController(SavePdfFileImpl pdfService,
+                             FlightServiceImpl flightService,
+                             PassengerServiceImpl passengerService) {
 
         this.pdfService = pdfService;
         this.flightService = flightService;
