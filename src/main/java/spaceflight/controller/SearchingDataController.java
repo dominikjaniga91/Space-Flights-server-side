@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
-@RequestMapping("/search")
+@RequestMapping("/api/search")
 public class SearchingDataController {
 
 
