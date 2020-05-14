@@ -8,23 +8,25 @@ import spaceflight.repository.FlightRepositoryImpl;
 import spaceflight.repository.PassengerRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import spaceflight.service.SearchingService;
 
 import java.time.LocalDate;
 import java.util.*;
 
 @Service
-public class SearchingServiceImpl {
+public class SearchingServiceImpl implements SearchingService {
+
+    private FlightRepositoryImpl flightDao;
+    private PassengerRepositoryImpl passengerDao;
 
     @Autowired
-    FlightRepositoryImpl flightDao;
+    public SearchingServiceImpl(FlightRepositoryImpl flightDao, PassengerRepositoryImpl passengerDao) {
+        this.flightDao = flightDao;
+        this.passengerDao = passengerDao;
+    }
 
-    @Autowired
-    PassengerRepositoryImpl passengerDao;
-
-
+    @Override
     public List<Flight> getFoundedFlights(HashMap<String, String> searchParams){
-
-        System.out.println(searchParams);
 
         List<Flight> flightList;
         LocalDate startDate = searchParams.containsKey("startDate") ? LocalDate.parse(searchParams.get("startDate")) : null;
@@ -46,7 +48,7 @@ public class SearchingServiceImpl {
         return flightList;
     }
 
-
+    @Override
     public List<Passenger> getFoundedPassengers(HashMap<String, String> searchParams){
 
         List<Passenger> passengerList;
