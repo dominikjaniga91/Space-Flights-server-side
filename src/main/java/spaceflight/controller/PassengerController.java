@@ -2,8 +2,7 @@ package spaceflight.controller;
 
 import spaceflight.model.Flight;
 import spaceflight.model.Passenger;
-import spaceflight.service.FlightServiceImpl;
-import spaceflight.service.PassengerServiceImpl;
+import spaceflight.service.implementation.PassengerServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

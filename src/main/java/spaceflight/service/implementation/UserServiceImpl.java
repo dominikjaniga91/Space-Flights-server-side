@@ -1,10 +1,11 @@
-package spaceflight.service;
+package spaceflight.service.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import spaceflight.model.User;
 import spaceflight.repository.UserRepositoryImpl;
+import spaceflight.service.UserService;
 
 import java.util.List;
 

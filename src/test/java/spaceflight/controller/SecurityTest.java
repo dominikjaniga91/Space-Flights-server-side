@@ -17,7 +17,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import spaceflight.model.Passenger;
 import spaceflight.model.Sex;
-import spaceflight.service.PassengerServiceImpl;
+import spaceflight.service.implementation.PassengerServiceImpl;
 import java.time.LocalDate;
 import java.util.Date;
 import static org.mockito.ArgumentMatchers.any;

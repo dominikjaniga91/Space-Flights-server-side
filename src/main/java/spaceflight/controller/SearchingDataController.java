@@ -2,7 +2,7 @@ package spaceflight.controller;
 
 import spaceflight.model.Flight;
 import spaceflight.model.Passenger;
-import spaceflight.service.SearchingServiceImpl;
+import spaceflight.service.implementation.SearchingServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
-@RequestMapping("/search")
+@RequestMapping("/api/search")
 public class SearchingDataController {
 
 

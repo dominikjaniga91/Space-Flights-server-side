@@ -1,4 +1,4 @@
-package spaceflight.service;
+package spaceflight.service.implementation;
 
 import spaceflight.exception.FlightNotFoundException;
 import spaceflight.exception.PassengerNotFoundException;
@@ -8,11 +8,14 @@ import spaceflight.repository.FlightRepositoryImpl;
 import spaceflight.repository.PassengerRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import spaceflight.service.FlightService;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
-public class FlightServiceImpl implements FlightService{
+public class FlightServiceImpl implements FlightService {
 
     private FlightRepositoryImpl flightDao;
     private PassengerRepositoryImpl passengerDao;
@@ -47,6 +50,30 @@ public class FlightServiceImpl implements FlightService{
     @Override
     public List<Flight> findAll(){
         return flightDao.findAll();
+    }
+
+    @Override
+    public List<Map<String, Object>> getFlightsAsListOfMaps(){
+
+        List<Flight> flights = flightDao.findAll();
+
+        List<Map<String, Object>> listOfFlights = new ArrayList<>();
+
+        flights.forEach(flight -> {
+
+            Map<String, Object> flightMap = new LinkedHashMap<>();
+            flightMap.put("ID", flight.getId());
+            flightMap.put("Destination", flight.getDestination());
+            flightMap.put("Start date", flight.getStartDate());
+            flightMap.put("Finish date", flight.getFinishDate());
+            flightMap.put("Number of seats", flight.getNumberOfSeats());
+            flightMap.put("Ticket price", flight.getTicketPrice());
+            flightMap.put("Passengers", flight.getAmountOfPassengers());
+
+            listOfFlights.add(flightMap);
+        });
+
+        return listOfFlights;
     }
 
     @Override

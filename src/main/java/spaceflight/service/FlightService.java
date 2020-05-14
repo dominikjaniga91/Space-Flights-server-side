@@ -2,8 +2,8 @@ package spaceflight.service;
 
 import spaceflight.model.Flight;
 import spaceflight.model.Passenger;
-
 import java.util.List;
+import java.util.Map;
 
 public interface FlightService {
 
@@ -22,5 +22,7 @@ public interface FlightService {
     void addPassengersToFlight(int flightId, int[] passengers);
 
     void deletePassengerFromFlight(int flightId, int passengerId);
+
+    List<Map<String, Object>> getFlightsAsListOfMaps();
 
 }

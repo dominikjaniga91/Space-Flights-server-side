@@ -8,15 +8,17 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import spaceflight.service.FlightServiceImpl;
-import spaceflight.service.PassengerServiceImpl;
+import spaceflight.service.implementation.FlightServiceImpl;
+import spaceflight.service.implementation.PassengerServiceImpl;
 import javax.validation.ConstraintViolationException;
 import java.time.LocalDate;
 import java.util.stream.Stream;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
+@ActiveProfiles("test")
 @DisplayName("Throws an validation exception when")
 public class ValidationTest {
 
