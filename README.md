@@ -1,6 +1,7 @@
 # Space Flights
 
 https://myspacetrip.herokuapp.com/login
+check out app functionality using following credentials: login: admin password: admin
 
 ## Description
 
